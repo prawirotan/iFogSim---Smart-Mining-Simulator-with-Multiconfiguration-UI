@@ -1,0 +1,13 @@
+.gradient-background{
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #D91F4E, #FF854C);
+}
+
+.line-color{
+	-fx-background-color: #F3ABB5;
+}
+.container{
+	-fx-background-color: rgba(255,255,25,0.2);
+	-fx-background-radius: 10;
+}
+
+.chart-series-line {-fx-stroke-width: 1px;}

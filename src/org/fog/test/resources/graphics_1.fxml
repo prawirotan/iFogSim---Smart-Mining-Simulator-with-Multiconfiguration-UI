@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1300.0" styleClass="gradient-background" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fog.test.resources.GraphicsController">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="70.0" prefWidth="501.0" text="SMART MINING FOG SIMULATION" textFill="#ffd8d8">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="32.0" />
+               </font>
+            </Label>
+            <Pane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1.0" prefWidth="758.0" styleClass="line-color" stylesheets="@styles.css">
+               <cursor>
+                  <Cursor fx:constant="CLOSED_HAND" />
+               </cursor>
+            </Pane>
+         </children>
+      </HBox>
+   </top>
+   <left>
+      <VBox maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="295.0" spacing="10.0" styleClass="container" stylesheets="@styles.css" BorderPane.alignment="CENTER">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="10.0" right="10.0" />
+         </BorderPane.margin>
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="startSimGUI" mnemonicParsing="false" onAction="#startSimulatorOnClick" prefHeight="107.0" prefWidth="280.0" text="START SIMULATION">
+                     <font>
+                        <Font name="Gadugi Bold" size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <VBox prefHeight="666.0" prefWidth="275.0" stylesheets="@styles.css">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="292.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="AMOUNT OF FOG DEVICES">
+                                 <font>
+                                    <Font name="Dubai Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="fog1" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="67.0" prefWidth="54.0" text="1" />
+                                    <Button fx:id="fog2" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="71.0" prefWidth="57.0" text="2" />
+                                    <Button fx:id="fog3" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="65.0" prefWidth="59.0" text="3" />
+                                    <Button fx:id="fog4" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="73.0" prefWidth="59.0" text="4" />
+                                    <Button fx:id="fog5" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="69.0" prefWidth="56.0" text="5" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="292.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="GAS SENSORS">
+                                 <font>
+                                    <Font name="Dubai Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="gas1" mnemonicParsing="false" onAction="#changeGasSensorAmount" prefHeight="67.0" prefWidth="54.0" text="1" />
+                                    <Button fx:id="gas2" mnemonicParsing="false" onAction="#changeGasSensorAmount" prefHeight="71.0" prefWidth="57.0" text="2" />
+                                    <Button fx:id="gas3" mnemonicParsing="false" onAction="#changeGasSensorAmount" prefHeight="65.0" prefWidth="59.0" text="3" />
+                                    <Button fx:id="gas4" mnemonicParsing="false" onAction="#changeGasSensorAmount" prefHeight="73.0" prefWidth="59.0" text="4" />
+                                    <Button fx:id="gas5" mnemonicParsing="false" onAction="#changeGasSensorAmount" prefHeight="69.0" prefWidth="56.0" text="5" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="292.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CHEMICAL SENSORS">
+                                 <font>
+                                    <Font name="Dubai Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="ch1" mnemonicParsing="false" onAction="#changeChSensorAmount" prefHeight="67.0" prefWidth="54.0" text="1" />
+                                    <Button fx:id="ch2" mnemonicParsing="false" onAction="#changeChSensorAmount" prefHeight="71.0" prefWidth="57.0" text="2" />
+                                    <Button fx:id="ch3" mnemonicParsing="false" onAction="#changeChSensorAmount" prefHeight="65.0" prefWidth="59.0" text="3" />
+                                    <Button fx:id="ch4" mnemonicParsing="false" onAction="#changeChSensorAmount" prefHeight="73.0" prefWidth="59.0" text="4" />
+                                    <Button fx:id="ch5" mnemonicParsing="false" onAction="#changeChSensorAmount" prefHeight="69.0" prefWidth="56.0" text="5" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="292.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="SURROUNDING SENSORS">
+                                 <font>
+                                    <Font name="Dubai Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="sr1" mnemonicParsing="false" onAction="#changeSrSensorAmount" prefHeight="67.0" prefWidth="54.0" text="1" />
+                                    <Button fx:id="sr2" mnemonicParsing="false" onAction="#changeSrSensorAmount" prefHeight="71.0" prefWidth="57.0" text="2" />
+                                    <Button fx:id="sr3" mnemonicParsing="false" onAction="#changeSrSensorAmount" prefHeight="65.0" prefWidth="59.0" text="3" />
+                                    <Button fx:id="sr4" mnemonicParsing="false" onAction="#changeSrSensorAmount" prefHeight="73.0" prefWidth="59.0" text="4" />
+                                    <Button fx:id="sr5" mnemonicParsing="false" onAction="#changeSrSensorAmount" prefHeight="69.0" prefWidth="56.0" text="5" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="292.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CLOUD">
+                                 <font>
+                                    <Font name="Dubai Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="yesCloud" mnemonicParsing="false" onAction="#cloudConfigure" prefHeight="63.0" prefWidth="170.0" text="YES" />
+                                    <Button fx:id="noCloud" mnemonicParsing="false" onAction="#cloudConfigure" prefHeight="63.0" prefWidth="171.0" text="NO" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="100.0" prefWidth="292.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="EXIT AFTER ONE SIMULATION!">
+                                 <font>
+                                    <Font name="Dubai Bold" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Button fx:id="exitProgram" mnemonicParsing="false" onAction="#exitOnClick" prefHeight="63.0" prefWidth="299.0" text="EXIT" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="373.0" prefWidth="935.0" styleClass="container" stylesheets="@styles.css">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="40.0" />
+               </VBox.margin>
+               <children>
+                  <VBox prefHeight="373.0" prefWidth="440.0">
+                     <children>
+                        <Label prefHeight="32.0" prefWidth="215.0" text="NETWORK USAGE">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <BarChart fx:id="networkUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" fx:id="xAxisNetwork" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="yAxisNetwork" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="373.0" prefWidth="440.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="322.0" text="APPLICATION LOOP DELAY">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <BarChart fx:id="appLoopDelayUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" fx:id="xAxisAppDelay" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="yAxisAppDelay" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox prefHeight="406.0" prefWidth="935.0" styleClass="container" stylesheets="@styles.css">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="40.0" />
+               </VBox.margin>
+               <children>
+                  <VBox prefHeight="373.0" prefWidth="440.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="284.0" text="ENERGY CONSUMPTION">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <BarChart fx:id="energyConsumptionUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" fx:id="xAxisEnergyCon" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="yAxisEnergyCon" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="373.0" prefWidth="440.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="363.0" text="TUPLE CPU EXECUTION DELAY">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" top="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <BarChart fx:id="tupleExecutionUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" fx:id="xAxisTupleExec" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis fx:id="yAxisTupleExec" side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
