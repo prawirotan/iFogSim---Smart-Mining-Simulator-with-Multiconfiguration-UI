@@ -54,7 +54,7 @@
                      <children>
                         <VBox prefHeight="100.0" prefWidth="292.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="AMOUNT OF FOG DEVICES">
+                              <Label fx:id="fogLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="AMOUNT OF FOG DEVICES">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
@@ -76,7 +76,7 @@
                      <children>
                         <VBox prefHeight="100.0" prefWidth="292.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="GAS SENSORS">
+                              <Label fx:id="gasLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="GAS SENSORS">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
@@ -98,7 +98,7 @@
                      <children>
                         <VBox prefHeight="100.0" prefWidth="292.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CHEMICAL SENSORS">
+                              <Label fx:id="chLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CHEMICAL SENSORS">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
@@ -120,7 +120,7 @@
                      <children>
                         <VBox prefHeight="100.0" prefWidth="292.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="SURROUNDING SENSORS">
+                              <Label fx:id="srLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="SURROUNDING SENSORS">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
@@ -142,7 +142,7 @@
                      <children>
                         <VBox prefHeight="100.0" prefWidth="292.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CLOUD">
+                              <Label fx:id="cloudLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CLOUD">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
@@ -159,16 +159,81 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <VBox prefHeight="100.0" prefWidth="292.0">
+                        <VBox prefHeight="102.0" prefWidth="313.0">
                            <children>
-                              <Label alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="EXIT AFTER ONE SIMULATION!">
+                              <Label fx:id="configurations" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CONFIGURATIONS">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
                               </Label>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
+                              <HBox prefHeight="85.0" prefWidth="297.0">
                                  <children>
-                                    <Button fx:id="exitProgram" mnemonicParsing="false" onAction="#exitOnClick" prefHeight="63.0" prefWidth="299.0" text="EXIT" />
+                                    <HBox prefHeight="100.0" prefWidth="311.0">
+                                       <children>
+                                          <VBox prefHeight="100.0" prefWidth="199.0">
+                                             <children>
+                                                <Label text="Fog Devices: ">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Gas Sensors: ">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Chemical Sensors: ">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label prefHeight="17.0" prefWidth="238.0" text="Surrounding Sensors: ">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Cloud: ">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox prefHeight="100.0" prefWidth="199.0">
+                                             <children>
+                                                <Label fx:id="fogConfig">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="gasConfig">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="chConfig">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="srConfig" prefHeight="17.0" prefWidth="238.0">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="cloudConfig">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </HBox>
                            </children>
@@ -198,7 +263,7 @@
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="networkUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="networkUsageChart" legendSide="TOP" legendVisible="false" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" fx:id="xAxisNetwork" />
                           </xAxis>
@@ -221,7 +286,7 @@
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="appLoopDelayUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="appLoopDelayUsageChart" legendSide="TOP" legendVisible="false" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" fx:id="xAxisAppDelay" />
                           </xAxis>
@@ -241,7 +306,7 @@
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="cloudEnergyConsumptionUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="cloudEnergyConsumptionUsageChart" legendSide="TOP" legendVisible="false" styleClass="chart-series-line" stylesheets="@styles.css">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" fx:id="xAxisCloudEnergyCon" />
                            </xAxis>
@@ -271,7 +336,7 @@
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="energyConsumptionUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="energyConsumptionUsageChart" legendSide="TOP" legendVisible="false" minHeight="-Infinity" minWidth="-Infinity" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" fx:id="xAxisEnergyCon" />
                           </xAxis>
@@ -291,7 +356,7 @@
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="tupleExecutionUsageChart" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="tupleExecutionUsageChart" legendSide="TOP" legendVisible="false" minHeight="-Infinity" minWidth="-Infinity" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" fx:id="xAxisTupleExec" />
                           </xAxis>

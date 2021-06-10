@@ -4,6 +4,9 @@ package org.fog.test.resources;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Label;
+
+
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -23,6 +26,8 @@ import javafx.scene.control.Button;
 
 public class GraphicsController implements Initializable {
 	
+		@FXML
+		private Label fogLabel;
 	    @FXML
 	    private Button fog1;
 	    @FXML
@@ -34,6 +39,8 @@ public class GraphicsController implements Initializable {
 	    @FXML
 	    private Button fog5;
 	    @FXML
+		private Label gasLabel;
+	    @FXML
 	    private Button gas1;
 	    @FXML
 	    private Button gas2;
@@ -43,6 +50,8 @@ public class GraphicsController implements Initializable {
 	    private Button gas4;
 	    @FXML
 	    private Button gas5;
+	    @FXML
+		private Label chLabel;
 	    @FXML
 	    private Button ch1;
 	    @FXML
@@ -54,6 +63,8 @@ public class GraphicsController implements Initializable {
 	    @FXML
 	    private Button ch5;
 	    @FXML
+		private Label srLabel;
+	    @FXML
 	    private Button sr1;
 	    @FXML
 	    private Button sr2;
@@ -64,13 +75,27 @@ public class GraphicsController implements Initializable {
 	    @FXML
 	    private Button sr5;
 	    @FXML
+		private Label cloudLabel;
+	    @FXML
 	    private Button yesCloud;
 	    @FXML 
 	    private Button noCloud;
 	    @FXML
 	    private Button startSimGUI;
 	    @FXML
-	    private Button exitProgram;
+	    private Label fogConfig;
+	    @FXML
+	    private Label gasConfig;
+	    @FXML
+	    private Label chConfig;
+	    @FXML
+	    private Label srConfig;
+	    @FXML
+	    private Label cloudConfig;
+	    @FXML
+	    private Label configurations;
+	    
+	   
 	    @FXML
 	    private BarChart<String, Double> networkUsageChart;
 	    @FXML
@@ -116,18 +141,23 @@ public class GraphicsController implements Initializable {
 
 	    	if (event.getSource() == fog1) {
 	    		SmartMiningMain.setFogDeviceAmount(1);
+	    		fogConfig.setText("1");
 	    	}
 	    	else if (event.getSource() == fog2) {
 	    		SmartMiningMain.setFogDeviceAmount(2);
+	    		fogConfig.setText("2");
 	    	}
 	    	else if (event.getSource() == fog3) {
 	    		SmartMiningMain.setFogDeviceAmount(3);
+	    		fogConfig.setText("3");
 	    	}
 	    	else if (event.getSource() == fog4) {
 	    		SmartMiningMain.setFogDeviceAmount(4);
+	    		fogConfig.setText("4");
 	    	}
 	    	else if (event.getSource() == fog5) {
 	    		SmartMiningMain.setFogDeviceAmount(5);
+	    		fogConfig.setText("5");
 	    	}
 	    }
 	    
@@ -135,18 +165,23 @@ public class GraphicsController implements Initializable {
 	    void changeGasSensorAmount(ActionEvent event) {
 	    	if (event.getSource() == gas1) {
 	    		SmartMiningMain.setGasSensorAmount(1);
+	    		gasConfig.setText("1");
 	    	}
 	    	else if (event.getSource() == gas2) {
 	    		SmartMiningMain.setGasSensorAmount(2);
+	    		gasConfig.setText("2");
 	    	}
 	    	else if (event.getSource() == gas3) {
 	    		SmartMiningMain.setGasSensorAmount(3);
+	    		gasConfig.setText("3");
 	    	}
 	    	else if (event.getSource() == gas4) {
 	    		SmartMiningMain.setGasSensorAmount(4);
+	    		gasConfig.setText("4");
 	    	}
 	    	else if (event.getSource() == gas5) {
 	    		SmartMiningMain.setGasSensorAmount(5);
+	    		gasConfig.setText("5");
 	    	}
 	    }
 	    
@@ -154,18 +189,23 @@ public class GraphicsController implements Initializable {
 	    void changeChSensorAmount(ActionEvent event) {
 	    	if (event.getSource() == ch1) {
 	    		SmartMiningMain.setChSensorAmount(1);
+	    		chConfig.setText("1");
 	    	}
 	    	else if (event.getSource() == ch2) {
 	    		SmartMiningMain.setChSensorAmount(2);
+	    		chConfig.setText("2");
 	    	}
 	    	else if (event.getSource() == ch3) {
 	    		SmartMiningMain.setChSensorAmount(3);
+	    		chConfig.setText("3");
 	    	}
 	    	else if (event.getSource() == ch4) {
 	    		SmartMiningMain.setChSensorAmount(4);
+	    		chConfig.setText("4");
 	    	}
 	    	else if (event.getSource() == ch5) {
 	    		SmartMiningMain.setChSensorAmount(5);
+	    		chConfig.setText("5");
 	    	}
 	    }
 	    
@@ -173,27 +213,26 @@ public class GraphicsController implements Initializable {
 	    void changeSrSensorAmount(ActionEvent event) {
 	    	if (event.getSource() == sr1) {
 	    		SmartMiningMain.setSrSensorAmount(1);
+	    		srConfig.setText("1");
 	    	}
 	    	else if (event.getSource() == sr2) {
 	    		SmartMiningMain.setSrSensorAmount(2);
+	    		srConfig.setText("2");
 	    	}
 	    	else if (event.getSource() == sr3) {
 	    		SmartMiningMain.setSrSensorAmount(3);
+	    		srConfig.setText("3");
 	    	}
 	    	else if (event.getSource() == sr4) {
 	    		SmartMiningMain.setSrSensorAmount(4);
+	    		srConfig.setText("4");
 	    	}
 	    	else if (event.getSource() == sr5) {
 	    		SmartMiningMain.setSrSensorAmount(5);
+	    		srConfig.setText("5");
 	    	}
 	    }
 	    
-	    @FXML
-	    void exitOnClick(ActionEvent event) {
-	    	if (event.getSource() == exitProgram) {
-	    		System.exit(0);
-	    	}
-	    }
 	    
 	    @FXML
 	    void startSimulatorOnClick(ActionEvent event) {
@@ -211,6 +250,37 @@ public class GraphicsController implements Initializable {
 			th.setDaemon(true);
 			th.start();
 			task.setOnSucceeded(e -> {
+				
+				configurations.setText("Simulation Complete.");
+				startSimGUI.setVisible(false);
+				fogLabel.setVisible(false);
+				fog1.setVisible(false);
+				fog2.setVisible(false);
+				fog3.setVisible(false);
+				fog4.setVisible(false);
+				fog5.setVisible(false);
+				gasLabel.setVisible(false);
+				gas1.setVisible(false);
+				gas2.setVisible(false);
+				gas3.setVisible(false);
+				gas4.setVisible(false);
+				gas5.setVisible(false);
+				chLabel.setVisible(false);
+				ch1.setVisible(false);
+				ch2.setVisible(false);
+				ch3.setVisible(false);
+				ch4.setVisible(false);
+				ch5.setVisible(false);
+				srLabel.setVisible(false);
+				sr1.setVisible(false);
+				sr2.setVisible(false);
+				sr3.setVisible(false);
+				sr4.setVisible(false);
+				sr5.setVisible(false);
+				cloudLabel.setVisible(false);
+				yesCloud.setVisible(false);
+				noCloud.setVisible(false);
+				
 				System.out.println("NEXT TASK!");
 				//networkUsage and Cloud Usage
 				//System.out.println(SmartMiningMain.getNetworkUsageOutput());
@@ -309,6 +379,7 @@ public class GraphicsController implements Initializable {
 			        });
 			    }
 				cloudEnergyConsumptionUsageChart.getData().add(series5);
+				//System.exit(0);
 	
 			});
 	    }
@@ -317,9 +388,11 @@ public class GraphicsController implements Initializable {
 	    void cloudConfigure(ActionEvent event) {
 	    	if (event.getSource() == yesCloud) {
 	    		SmartMiningMain.setCloud(true);
+	    		cloudConfig.setText("YES");
 	    	}
 	    	else if (event.getSource() == noCloud) {
 	    		SmartMiningMain.setCloud(false);
+	    		cloudConfig.setText("NO");
 	    	}
 	    }
 
@@ -327,27 +400,24 @@ public class GraphicsController implements Initializable {
 		public void initialize(URL url, ResourceBundle rb) {
 			// TODO Auto-generated method stub
 			xAxisNetwork.setLabel("Cost");
-	        xAxisNetwork.setTickLabelRotation(90);
 	        yAxisNetwork.setLabel("Value");
 	        xAxisNetwork.setAnimated(false);
 	        
 	        xAxisAppDelay.setLabel("Cost");
-	        xAxisAppDelay.setTickLabelRotation(90);
 	        yAxisAppDelay.setLabel("Value");
 	        xAxisAppDelay.setAnimated(false);
 	        
 	        xAxisEnergyCon.setLabel("Cost");
-	        xAxisEnergyCon.setTickLabelRotation(90);
 	        yAxisEnergyCon.setLabel("Value");
+	        //xAxisEnergyCon.setTickLabelRotation(360);
 	        xAxisEnergyCon.setAnimated(false);
 	        
 	        xAxisTupleExec.setLabel("Cost");
-	        xAxisTupleExec.setTickLabelRotation(90);
 	        yAxisTupleExec.setLabel("Value");
+	        //xAxisTupleExec.setTickLabelRotation(360);
 	        xAxisTupleExec.setAnimated(false);
 	        
 	        xAxisCloudEnergyCon.setLabel("Cost");
-	        xAxisCloudEnergyCon.setTickLabelRotation(90);
 	        yAxisCloudEnergyCon.setLabel("Value");
 	        xAxisCloudEnergyCon.setAnimated(false);
 			
