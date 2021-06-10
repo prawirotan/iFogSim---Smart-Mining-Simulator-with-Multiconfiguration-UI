@@ -80,6 +80,8 @@ public class GraphicsController implements Initializable {
 	    @FXML
 	    private BarChart<String, Double> tupleExecutionUsageChart;
 	    @FXML
+	    private BarChart<String, Long> cloudEnergyConsumptionUsageChart;
+	    @FXML
 	    private CategoryAxis xAxisNetwork;
 	    @FXML
 	    private NumberAxis yAxisNetwork;
@@ -95,6 +97,11 @@ public class GraphicsController implements Initializable {
 	    private CategoryAxis xAxisTupleExec;
 	    @FXML
 	    private NumberAxis yAxisTupleExec;
+	    @FXML
+	    private CategoryAxis xAxisCloudEnergyCon;
+	    @FXML
+	    private NumberAxis yAxisCloudEnergyCon;
+	    
 	    
 	    List<Double> appLoopData = SmartMiningMain.getAppLoopDelayOutput();
 	    Map<String, Double> energyConsumptionMapData = SmartMiningMain.getEnergyConsumptionOutputMap();
@@ -287,6 +294,21 @@ public class GraphicsController implements Initializable {
 			        });
 				}
 				tupleExecutionUsageChart.getData().add(series4);
+				
+				//cloud Energy Consumption
+				XYChart.Series<String, Long> series5 = new XYChart.Series<>();
+				cloudEnergyConsumptionMapData = SmartMiningMain.getCloudEnergyConsumptionOutputMap();
+				
+				if (cloudEnergyConsumptionMapData != null) {
+			        cloudEnergyConsumptionMapData.forEach((k, v) -> {
+			        	System.out.println("SUP DIS CLOUD");
+			            if (v != null) {
+			            	
+			            	series5.getData().add(new XYChart.Data<String, Long>(v, k));
+			            }
+			        });
+			    }
+				cloudEnergyConsumptionUsageChart.getData().add(series5);
 	
 			});
 	    }
@@ -323,6 +345,11 @@ public class GraphicsController implements Initializable {
 	        xAxisTupleExec.setTickLabelRotation(90);
 	        yAxisTupleExec.setLabel("Value");
 	        xAxisTupleExec.setAnimated(false);
+	        
+	        xAxisCloudEnergyCon.setLabel("Cost");
+	        xAxisCloudEnergyCon.setTickLabelRotation(90);
+	        yAxisCloudEnergyCon.setLabel("Value");
+	        xAxisCloudEnergyCon.setAnimated(false);
 			
 		}
 		

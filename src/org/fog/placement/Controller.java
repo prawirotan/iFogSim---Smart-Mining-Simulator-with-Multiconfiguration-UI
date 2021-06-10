@@ -149,6 +149,7 @@ public class Controller extends SimEntity{
 			if (fogDevice.getName() == "cloud") {
 				long number = Double.valueOf(fogDevice.getEnergyConsumption()).longValue();
 				cloudEnergyConsumptionMap.put(number, "Cloud");
+				
 			}
 			if (fogDevice.getName().startsWith("p")) {
 				energyConsumptionMap.put("Proxy Server", fogDevice.getEnergyConsumption());
@@ -168,9 +169,7 @@ public class Controller extends SimEntity{
 			if (fogDevice.getName().startsWith("s")) {
 				energyConsumptionMap.put("Surrounding Sensor", fogDevice.getEnergyConsumption());
 			}
-			System.out.println("energyMapThing size: " + energyConsumptionMap.size());
 		}
-		System.out.println("energyMapThing size: " + energyConsumptionMap.size());
 	}
 
 	private String getStringForLoopId(int loopId){
