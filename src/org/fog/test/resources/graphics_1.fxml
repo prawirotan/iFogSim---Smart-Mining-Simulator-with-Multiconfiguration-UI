@@ -13,16 +13,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="880.0" prefWidth="1300.0" styleClass="gradient-background" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fog.test.resources.GraphicsController">
+<BorderPane prefHeight="1000.0" prefWidth="1300.0" styleClass="gradient-background" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fog.test.resources.GraphicsController">
    <top>
-      <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="1259.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" prefHeight="70.0" prefWidth="501.0" text="SMART MINING FOG SIMULATION" textFill="#ffd8d8">
+            <Label alignment="CENTER" prefHeight="70.0" prefWidth="661.0" text="SMART MINING FOG SIMULATION" textFill="#ffd68a">
                <font>
-                  <Font name="Franklin Gothic Medium" size="32.0" />
+                  <Font name="Lato Bold" size="34.0" />
                </font>
             </Label>
-            <Pane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1.0" prefWidth="758.0" styleClass="line-color" stylesheets="@styles.css">
+            <Pane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="4.0" prefWidth="711.0" styleClass="line-color" stylesheets="@styles.css">
                <cursor>
                   <Cursor fx:constant="CLOSED_HAND" />
                </cursor>
@@ -159,6 +159,15 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveToFile" prefHeight="93.0" prefWidth="295.0" text="CLICK HERE TO SAVE OUTPUT TO TEXT FILE" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Ebrima Bold" size="20.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
                         <VBox prefHeight="102.0" prefWidth="313.0">
                            <children>
                               <Label fx:id="configurations" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CONFIGURATIONS">
@@ -174,27 +183,27 @@
                                              <children>
                                                 <Label text="Fog Devices: ">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
                                                 <Label text="Gas Sensors: ">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
                                                 <Label text="Chemical Sensors: ">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
                                                 <Label prefHeight="17.0" prefWidth="238.0" text="Surrounding Sensors: ">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
                                                 <Label text="Cloud: ">
                                                    <font>
-                                                      <Font size="18.0" />
+                                                      <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
                                              </children>
@@ -248,7 +257,7 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="373.0" prefWidth="935.0" styleClass="container" stylesheets="@styles.css">
+            <HBox prefHeight="622.0" prefWidth="1000.0" styleClass="container" stylesheets="@styles.css">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" />
                </VBox.margin>
@@ -257,19 +266,22 @@
                      <children>
                         <Label prefHeight="32.0" prefWidth="215.0" text="NETWORK USAGE">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="Lato Regular" size="19.0" />
                            </font>
                            <VBox.margin>
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="networkUsageChart" legendSide="TOP" legendVisible="false" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="networkUsageChart" legendSide="TOP" legendVisible="false" prefHeight="450.0" prefWidth="400.0" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" fx:id="xAxisNetwork" />
                           </xAxis>
                           <yAxis>
                             <NumberAxis fx:id="yAxisNetwork" side="LEFT" />
                           </yAxis>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                         </BarChart>
                      </children>
                      <HBox.margin>
@@ -280,13 +292,13 @@
                      <children>
                         <Label prefHeight="36.0" prefWidth="322.0" text="APP LOOP DELAY">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="Lato Regular" size="19.0" />
                            </font>
                            <VBox.margin>
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="appLoopDelayUsageChart" legendSide="TOP" legendVisible="false" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="appLoopDelayUsageChart" legendSide="TOP" legendVisible="false" prefHeight="450.0" prefWidth="400.0" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" fx:id="xAxisAppDelay" />
                           </xAxis>
@@ -300,13 +312,13 @@
                      <children>
                         <Label prefHeight="36.0" prefWidth="322.0" text="CLOUD ENERGY CONSUMPTION">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="Lato Regular" size="19.0" />
                            </font>
                            <VBox.margin>
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="cloudEnergyConsumptionUsageChart" legendSide="TOP" legendVisible="false" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="cloudEnergyConsumptionUsageChart" legendSide="TOP" legendVisible="false" prefHeight="450.0" prefWidth="400.0" styleClass="chart-series-line" stylesheets="@styles.css">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" fx:id="xAxisCloudEnergyCon" />
                            </xAxis>
@@ -321,24 +333,24 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="406.0" prefWidth="935.0" styleClass="container" stylesheets="@styles.css">
+            <HBox prefHeight="538.0" prefWidth="1000.0" styleClass="container" stylesheets="@styles.css">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" />
                </VBox.margin>
                <children>
-                  <VBox prefHeight="373.0" prefWidth="440.0">
+                  <VBox prefHeight="412.0" prefWidth="500.0">
                      <children>
                         <Label prefHeight="25.0" prefWidth="412.0" text="FOG DEVICE ENERGY CONSUMPTION">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="Lato Regular" size="19.0" />
                            </font>
                            <VBox.margin>
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="energyConsumptionUsageChart" legendSide="TOP" legendVisible="false" minHeight="-Infinity" minWidth="-Infinity" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="energyConsumptionUsageChart" legendSide="TOP" legendVisible="false" prefHeight="450.0" prefWidth="650.0" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" fx:id="xAxisEnergyCon" />
+                            <CategoryAxis side="BOTTOM" tickLabelGap="6.0" fx:id="xAxisEnergyCon" />
                           </xAxis>
                           <yAxis>
                             <NumberAxis fx:id="yAxisEnergyCon" side="LEFT" />
@@ -350,15 +362,15 @@
                      <children>
                         <Label prefHeight="36.0" prefWidth="363.0" text="TUPLE CPU EXECUTION DELAY">
                            <font>
-                              <Font size="20.0" />
+                              <Font name="Lato Regular" size="19.0" />
                            </font>
                            <VBox.margin>
                               <Insets left="15.0" top="10.0" />
                            </VBox.margin>
                         </Label>
-                        <BarChart fx:id="tupleExecutionUsageChart" legendSide="TOP" legendVisible="false" minHeight="-Infinity" minWidth="-Infinity" styleClass="chart-series-line" stylesheets="@styles.css">
+                        <BarChart fx:id="tupleExecutionUsageChart" legendSide="TOP" legendVisible="false" prefHeight="450.0" prefWidth="650.0" styleClass="chart-series-line" stylesheets="@styles.css">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" fx:id="xAxisTupleExec" />
+                            <CategoryAxis side="BOTTOM" tickLabelGap="6.0" fx:id="xAxisTupleExec" />
                           </xAxis>
                           <yAxis>
                             <NumberAxis fx:id="yAxisTupleExec" side="LEFT" />

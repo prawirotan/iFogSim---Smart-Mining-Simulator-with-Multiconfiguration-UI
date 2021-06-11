@@ -152,22 +152,22 @@ public class Controller extends SimEntity{
 				
 			}
 			if (fogDevice.getName().startsWith("p")) {
-				energyConsumptionMap.put("Proxy Server", fogDevice.getEnergyConsumption());
+				energyConsumptionMap.put("Proxy_Server", fogDevice.getEnergyConsumption());
 			}
 			if (fogDevice.getName().startsWith("r")) {
 				energyConsumptionMap.put("Router", fogDevice.getEnergyConsumption());
 			}
 			if (fogDevice.getName().startsWith("a")) {
-				energyConsumptionMap.put("Master Module", fogDevice.getEnergyConsumption());
+				energyConsumptionMap.put("Master_Module", fogDevice.getEnergyConsumption());
 			}
 			if (fogDevice.getName().startsWith("g")) {
-				energyConsumptionMap.put("Gas Sensor", fogDevice.getEnergyConsumption());
+				energyConsumptionMap.put("Gas_Sensor", fogDevice.getEnergyConsumption());
 			}
 			if (fogDevice.getName().startsWith("d")) {
-				energyConsumptionMap.put("Chemical Sensor", fogDevice.getEnergyConsumption());
+				energyConsumptionMap.put("Chemical_Sensor", fogDevice.getEnergyConsumption());
 			}
 			if (fogDevice.getName().startsWith("s")) {
-				energyConsumptionMap.put("Surrounding Sensor", fogDevice.getEnergyConsumption());
+				energyConsumptionMap.put("Surrounding_Sensor", fogDevice.getEnergyConsumption());
 			}
 		}
 	}

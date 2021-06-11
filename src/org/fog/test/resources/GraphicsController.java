@@ -1,13 +1,24 @@
 package org.fog.test.resources;
 
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 
-
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +29,10 @@ import org.fog.test.perfeval.SmartMiningMain;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -94,6 +109,8 @@ public class GraphicsController implements Initializable {
 	    private Label cloudConfig;
 	    @FXML
 	    private Label configurations;
+	    @FXML
+	    private Button saveButton;
 	    
 	   
 	    @FXML
@@ -132,6 +149,16 @@ public class GraphicsController implements Initializable {
 	    Map<String, Double> energyConsumptionMapData = SmartMiningMain.getEnergyConsumptionOutputMap();
 	    Map<Long, String> cloudEnergyConsumptionMapData = SmartMiningMain.getCloudEnergyConsumptionOutputMap();
 	    Map<String, Double> tupleExecutionMapData = SmartMiningMain.getTupleExecutionOutputMap();
+	    
+	    String currentNetworkUsageKey;
+	    Double currentNetworkUsageValue;
+	    String currentCloudUsageKey;
+	    Double currentCloudUsageValue;
+	    String currentCloudEnergyConKey;
+	    Long currentCloudEnergyConValue;
+	    
+	    List<String> currentEnergyConKey = new ArrayList<String>();
+	    List<Double> currentEnergyConValue = new ArrayList<Double>();
 	    
 	    
 	    
@@ -234,7 +261,8 @@ public class GraphicsController implements Initializable {
 	    }
 	    
 	    
-	    @FXML
+	    @SuppressWarnings({ "rawtypes", "unchecked" })
+		@FXML
 	    void startSimulatorOnClick(ActionEvent event) {
 	    	Task<Void> task = new Task<Void>() {
 
@@ -280,108 +308,331 @@ public class GraphicsController implements Initializable {
 				cloudLabel.setVisible(false);
 				yesCloud.setVisible(false);
 				noCloud.setVisible(false);
+				saveButton.setVisible(true);
 				
 				System.out.println("NEXT TASK!");
 				//networkUsage and Cloud Usage
-				//System.out.println(SmartMiningMain.getNetworkUsageOutput());
-				//System.out.println(SmartMiningMain.getCloudUsageOutput()); 
-				XYChart.Series<String, Double> series1 = new XYChart.Series<>();
-				series1.getData().add(new XYChart.Data<String, Double>("Network Usage", SmartMiningMain.getNetworkUsageOutput()));
-				series1.getData().add(new XYChart.Data<String, Double>("Cloud Usage", SmartMiningMain.getCloudUsageOutput()));
-				networkUsageChart.getData().add(series1);	
+
+				XYChart.Series series1 = new XYChart.Series<>();
+				final XYChart.Data<String, Number> dataNetworkUsage = new XYChart.Data("Network Usage", SmartMiningMain.getNetworkUsageOutput());
+				final XYChart.Data<String, Number> dataCloudUsage = new XYChart.Data("Cloud Usage", SmartMiningMain.getCloudUsageOutput());
+				
+				dataNetworkUsage.nodeProperty().addListener(new ChangeListener<Node>() {
+			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+			          if (node != null) {      
+			            displayLabelForData(dataNetworkUsage);
+			          } 
+			        }
+				});
+				
+				dataCloudUsage.nodeProperty().addListener(new ChangeListener<Node>() {
+			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+			          if (node != null) {      
+			            displayLabelForData(dataCloudUsage);
+			          } 
+			        }
+				});
+				
+				
+				series1.getData().add(dataNetworkUsage);
+				series1.getData().add(dataCloudUsage);
+				
+				networkUsageChart.getData().add(series1);
+				
+				currentNetworkUsageKey = "Network Usage";
+				currentNetworkUsageValue = SmartMiningMain.getNetworkUsageOutput();
+				currentCloudUsageKey = "Cloud Usage";
+				currentCloudUsageValue = SmartMiningMain.getCloudUsageOutput();
+				
+				//###################################################################
 				
 				//appLoop
-				XYChart.Series<String, Double> series2 = new XYChart.Series<>();
+				XYChart.Series series2 = new XYChart.Series<>();
 				appLoopData = SmartMiningMain.getAppLoopDelayOutput();
 				
 				for (int i=0; i<appLoopData.size(); i++) {
 					//System.out.println("YO MAMA");
-					series2.getData().add(new XYChart.Data<String, Double>("Loop "+(i+1), appLoopData.get(i)));
+					final XYChart.Data<String, Number> dataAppLoop = new XYChart.Data("Loop "+(i+1), appLoopData.get(i));
+					dataAppLoop.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(dataAppLoop);
+				          } 
+				        }
+					});
+					//series2.getData().add(new XYChart.Data<String, Double>("Loop "+(i+1), appLoopData.get(i)));
+					series2.getData().add(dataAppLoop);
 				}
 				appLoopDelayUsageChart.getData().add(series2);
 				
+				//###################################################################################
+				
 				//energy Consumption
-				XYChart.Series<String, Double> series3 = new XYChart.Series<>();
+				XYChart.Series series3 = new XYChart.Series<>();
 				energyConsumptionMapData = SmartMiningMain.getEnergyConsumptionOutputMap();
 				
 				if (energyConsumptionMapData != null) {
 			        energyConsumptionMapData.forEach((k, v) -> {
 			            if (v != null && !k.contains("Router")) {
-			            	series3.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataEnergyCon = new XYChart.Data(k, v);
+			            	dataEnergyCon.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataEnergyCon);
+						          } 
+						        }
+							});
+			            	series3.getData().add(dataEnergyCon);
+			            	currentEnergyConKey.add(k);
+			            	currentEnergyConValue.add(v);
 			            }
 			            else if (v != null && !k.contains("Proxy Server")) {
-			            	series3.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	//series3.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataEnergyCon = new XYChart.Data(k, v);
+			            	dataEnergyCon.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataEnergyCon);
+						          } 
+						        }
+							});
+			            	series3.getData().add(dataEnergyCon);
+			            	currentEnergyConKey.add(k);
+			            	currentEnergyConValue.add(v);
 			            }
 			            else if (v != null && !k.contains("Master Module")) {
-			            	series3.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataEnergyCon = new XYChart.Data(k, v);
+			            	dataEnergyCon.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataEnergyCon);
+						          } 
+						        }
+							});
+			            	series3.getData().add(dataEnergyCon);
+			            	currentEnergyConKey.add(k);
+			            	currentEnergyConValue.add(v);
 			            }
 			            else if (v != null && !k.contains("Gas Sensor")) {
-			            	series3.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataEnergyCon = new XYChart.Data(k, v);
+			            	dataEnergyCon.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataEnergyCon);
+						          } 
+						        }
+							});
+			            	series3.getData().add(dataEnergyCon);
+			            	currentEnergyConKey.add(k);
+			            	currentEnergyConValue.add(v);
 			            }
 			            else if (v != null && !k.contains("Chemical Sensor")) {
-			            	series3.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataEnergyCon = new XYChart.Data(k, v);
+			            	dataEnergyCon.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataEnergyCon);
+						          } 
+						        }
+							});
+			            	series3.getData().add(dataEnergyCon);
+			            	currentEnergyConKey.add(k);
+			            	currentEnergyConValue.add(v);
 			            }
 			            else if (v != null && !k.contains("Surrounding Sensor")) {
-			            	series3.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataEnergyCon = new XYChart.Data(k, v);
+			            	dataEnergyCon.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataEnergyCon);
+						          } 
+						        }
+							});
+			            	series3.getData().add(dataEnergyCon);
+			            	currentEnergyConKey.add(k);
+			            	currentEnergyConValue.add(v);
 			            }
 			        });
 			    }
 				energyConsumptionUsageChart.getData().add(series3);
 				
+				//##############################################################################
+				
 				//tuple Execution
-				XYChart.Series<String, Double> series4 = new XYChart.Series<>();
+				XYChart.Series series4 = new XYChart.Series<>();
 				tupleExecutionMapData = SmartMiningMain.getTupleExecutionOutputMap();
 				
 				if (tupleExecutionMapData != null) {
 					tupleExecutionMapData.forEach((k, v) -> {
 			            if (v != null && !k.contains("SR")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	//series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("SR_TASK")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("SR_RESP")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("GAS")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("GAS_TASK")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("GAS_RESP")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("CH")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("CH_RESP")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			            else if (v != null && !k.contains("CH_RESP")) {
-			            	series4.getData().add(new XYChart.Data<String, Double>(k, v));
+			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
+			            	dataTupleExec.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataTupleExec);
+						          } 
+						        }
+							});
+			            	series4.getData().add(dataTupleExec);
 			            }
 			        });
 				}
 				tupleExecutionUsageChart.getData().add(series4);
 				
+				//################################################
+				
 				//cloud Energy Consumption
-				XYChart.Series<String, Long> series5 = new XYChart.Series<>();
+				XYChart.Series series5 = new XYChart.Series<>();
 				cloudEnergyConsumptionMapData = SmartMiningMain.getCloudEnergyConsumptionOutputMap();
 				
 				if (cloudEnergyConsumptionMapData != null) {
 			        cloudEnergyConsumptionMapData.forEach((k, v) -> {
-			        	System.out.println("SUP DIS CLOUD");
 			            if (v != null) {
-			            	
-			            	series5.getData().add(new XYChart.Data<String, Long>(v, k));
+			            	final XYChart.Data<String, Number> dataCloudCon = new XYChart.Data(v, k);
+			            	dataCloudCon.nodeProperty().addListener(new ChangeListener<Node>() {
+						        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+						          if (node != null) {      
+						            displayLabelForData(dataCloudCon);
+						          } 
+						        }
+							});
+			            	series5.getData().add(dataCloudCon);
+			            	currentCloudEnergyConKey = v;
+			            	currentCloudEnergyConValue = k;
 			            }
 			        });
 			    }
 				cloudEnergyConsumptionUsageChart.getData().add(series5);
-				//System.exit(0);
-	
 			});
+	    }
+	    
+	    
+	    @FXML
+	    void saveToFile(ActionEvent event) {
+	    	if (currentNetworkUsageKey == "Network Usage") {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("network-usage.txt", true))) {
+	    	        bw.write("Network" + currentNetworkUsageValue);
+	    	        bw.newLine();
+	    	        bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
+	    	        bw.newLine();
+	    	        bw.write("Cloud" + currentCloudUsageValue);
+	    	        bw.newLine();
+	    		} catch (IOException e) {
+	    	        e.printStackTrace();
+	    	    }
+	    	}
+	    	if (currentEnergyConKey.isEmpty()==false && currentCloudEnergyConKey.isEmpty()==false) {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("energy-con.txt", true))) {
+	    	        for (int i=0; i<currentEnergyConKey.size(); i++) {
+	    	        	bw.write("Energy!" + currentEnergyConValue.get(i));
+	    	        	bw.newLine();
+	    	        	bw.write("Name" + currentEnergyConKey.get(i));
+	    	        	bw.newLine();
+	    	        	bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
+	    	        	bw.newLine();
+	    	        }
+	    	        for (int i=0; i<1; i++) {
+	    	        	bw.write("CloudE." + currentCloudEnergyConValue);
+	    	        	bw.newLine();
+	    	        	bw.write("Cloud"+ currentCloudEnergyConKey);
+	    	        	bw.newLine();
+	    	        	System.out.println(cloudConfig);
+	    	        	bw.write("Cloud?Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
+	    	        	bw.newLine();
+	    	        }
+	    		} catch (IOException e) {
+	    	        e.printStackTrace();
+	    	    }
+	    	}
 	    }
 	    
 	    @FXML
@@ -409,19 +660,60 @@ public class GraphicsController implements Initializable {
 	        
 	        xAxisEnergyCon.setLabel("Cost");
 	        yAxisEnergyCon.setLabel("Value");
-	        //xAxisEnergyCon.setTickLabelRotation(360);
+	        //xAxisEnergyCon.setTickLabelRotation(720);
 	        xAxisEnergyCon.setAnimated(false);
 	        
 	        xAxisTupleExec.setLabel("Cost");
 	        yAxisTupleExec.setLabel("Value");
-	        //xAxisTupleExec.setTickLabelRotation(360);
+	        //xAxisTupleExec.setTickLabelRotation(720);
 	        xAxisTupleExec.setAnimated(false);
 	        
 	        xAxisCloudEnergyCon.setLabel("Cost");
 	        yAxisCloudEnergyCon.setLabel("Value");
 	        xAxisCloudEnergyCon.setAnimated(false);
+	        
+	        fogConfig.setText("3");
+	        gasConfig.setText("1");
+	        chConfig.setText("1");
+	        srConfig.setText("1");
+	        cloudConfig.setText("NO");
+	        
+	        saveButton.setVisible(false);
 			
 		}
 		
+		private void displayLabelForData(XYChart.Data<String, Number> data) {
+			  final Node node = data.getNode();
+			  final Text dataText = new Text(round(data.getYValue().doubleValue(), 1) + "");
+			  node.parentProperty().addListener(new ChangeListener<Parent>() {
+			    @Override public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
+			      Group parentGroup = (Group) parent;
+			      parentGroup.getChildren().add(dataText);
+			    }
+			  });
+
+			  node.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
+			    @Override public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+			      dataText.setLayoutX(
+			        Math.round(
+			          bounds.getMinX() + bounds.getWidth() / 2 - dataText.prefWidth(-1) / 2
+			        )
+			      );
+			      dataText.setLayoutY(
+			        Math.round(
+			          bounds.getMinY() - dataText.prefHeight(-1) * 0.1
+			        )
+			      );
+			    }
+			  });
+			}
+		
+		
+		public static double round(double value, int places) {
+		    if (places < 0) throw new IllegalArgumentException();
+		    BigDecimal bd = BigDecimal.valueOf(value);
+		    bd = bd.setScale(places, RoundingMode.HALF_UP);
+		    return bd.doubleValue();
+		}
 
 }

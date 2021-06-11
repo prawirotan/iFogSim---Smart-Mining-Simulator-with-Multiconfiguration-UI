@@ -95,6 +95,7 @@ public class SmartMiningMain extends Application{
 		launch(args);
 	}
 	
+	
 	public static void startSmartMiningSimulator() {
 		
 

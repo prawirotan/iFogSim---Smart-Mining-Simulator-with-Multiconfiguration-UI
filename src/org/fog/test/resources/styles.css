@@ -1,13 +1,17 @@
 .gradient-background{
-	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #D91F4E, #FF854C);
+	-fx-background-color: linear-gradient(from 25% 25% to 100% 100%, #754C00, #A36A00);
 }
 
 .line-color{
-	-fx-background-color: #F3ABB5;
+	-fx-background-color: #FFD68A;
 }
 .container{
-	-fx-background-color: rgba(255,255,25,0.2);
-	-fx-background-radius: 10;
+	-fx-background-color: #FFD68A;
+	-fx-background-radius: 20;
+}
+
+.chart-background {
+	-fx-background-color: #02C3BD;
 }
 
 .chart-series-line {-fx-stroke-width: 1px;}
