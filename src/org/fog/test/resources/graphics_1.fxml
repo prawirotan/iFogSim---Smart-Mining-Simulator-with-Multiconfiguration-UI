@@ -264,7 +264,7 @@
                <children>
                   <VBox prefHeight="373.0" prefWidth="440.0">
                      <children>
-                        <Label prefHeight="32.0" prefWidth="215.0" text="NETWORK USAGE">
+                        <Label prefHeight="32.0" prefWidth="215.0" text="NETWORK USAGE (KB)">
                            <font>
                               <Font name="Lato Regular" size="19.0" />
                            </font>
@@ -290,7 +290,7 @@
                   </VBox>
                   <VBox prefHeight="373.0" prefWidth="440.0">
                      <children>
-                        <Label prefHeight="36.0" prefWidth="322.0" text="APP LOOP DELAY">
+                        <Label prefHeight="36.0" prefWidth="322.0" text="APP LOOP DELAY (MS)">
                            <font>
                               <Font name="Lato Regular" size="19.0" />
                            </font>
@@ -310,9 +310,9 @@
                   </VBox>
                   <VBox prefHeight="373.0" prefWidth="440.0">
                      <children>
-                        <Label prefHeight="36.0" prefWidth="322.0" text="CLOUD ENERGY CONSUMPTION">
+                        <Label prefHeight="36.0" prefWidth="355.0" text="CLOUD ENERGY CONSUMPTION (J)" wrapText="true">
                            <font>
-                              <Font name="Lato Regular" size="19.0" />
+                              <Font name="Lato Regular" size="18.0" />
                            </font>
                            <VBox.margin>
                               <Insets left="15.0" top="10.0" />
@@ -340,7 +340,7 @@
                <children>
                   <VBox prefHeight="412.0" prefWidth="500.0">
                      <children>
-                        <Label prefHeight="25.0" prefWidth="412.0" text="FOG DEVICE ENERGY CONSUMPTION">
+                        <Label prefHeight="25.0" prefWidth="412.0" text="FOG DEVICE ENERGY CONSUMPTION (J)">
                            <font>
                               <Font name="Lato Regular" size="19.0" />
                            </font>
@@ -360,7 +360,7 @@
                   </VBox>
                   <VBox prefHeight="373.0" prefWidth="440.0">
                      <children>
-                        <Label prefHeight="36.0" prefWidth="363.0" text="TUPLE CPU EXECUTION DELAY">
+                        <Label prefHeight="36.0" prefWidth="363.0" text="TUPLE CPU EXECUTION DELAY (MS)">
                            <font>
                               <Font name="Lato Regular" size="19.0" />
                            </font>

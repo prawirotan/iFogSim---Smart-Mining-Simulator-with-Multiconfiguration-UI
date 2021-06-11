@@ -146,8 +146,10 @@ public class GraphicsController implements Initializable {
 	    
 	    
 	    List<Double> appLoopData = SmartMiningMain.getAppLoopDelayOutput();
+	    
 	    Map<String, Double> energyConsumptionMapData = SmartMiningMain.getEnergyConsumptionOutputMap();
 	    Map<Long, String> cloudEnergyConsumptionMapData = SmartMiningMain.getCloudEnergyConsumptionOutputMap();
+	    
 	    Map<String, Double> tupleExecutionMapData = SmartMiningMain.getTupleExecutionOutputMap();
 	    
 	    String currentNetworkUsageKey;
@@ -164,6 +166,10 @@ public class GraphicsController implements Initializable {
 	    
 	    List<String> currentEnergyConKey = new ArrayList<String>();
 	    List<Double> currentEnergyConValue = new ArrayList<Double>();
+	    
+	    List<String> currentTupleExecKey = new ArrayList<String>();
+	    List<Double> currentTupleExecValue = new ArrayList<Double>();
+
 	    
 	    
 	    
@@ -482,6 +488,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("SR_TASK")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -493,6 +501,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("SR_RESP")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -504,6 +514,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("GAS")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -515,6 +527,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("GAS_TASK")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -526,6 +540,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("GAS_RESP")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -537,6 +553,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("CH")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -548,6 +566,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("CH_RESP")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -559,6 +579,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			            else if (v != null && !k.contains("CH_RESP")) {
 			            	final XYChart.Data<String, Number> dataTupleExec = new XYChart.Data(k, v);
@@ -570,6 +592,8 @@ public class GraphicsController implements Initializable {
 						        }
 							});
 			            	series4.getData().add(dataTupleExec);
+			            	currentTupleExecKey.add(k);
+			            	currentTupleExecValue.add(v);
 			            }
 			        });
 				}
@@ -648,6 +672,20 @@ public class GraphicsController implements Initializable {
 	    		} catch (IOException e) {
 	    	        e.printStackTrace();
 	    	    }
+	    	}
+	    	if (currentTupleExecKey.isEmpty()==false && currentTupleExecValue.isEmpty()==false) {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("tuple-exec.txt", true))) {
+	    	        for (int i=0; i<currentTupleExecKey.size(); i++) {
+	    	        	bw.write("Tuple@" + currentTupleExecValue.get(i));
+	    	        	bw.newLine();
+	    	        	bw.write("Name?" + currentTupleExecKey.get(i));
+	    	        	bw.newLine();
+	    	        	bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
+	    	        	bw.newLine();
+	    	        }
+	    		} catch (IOException e) {
+	    			e.printStackTrace();
+	    		}
 	    	}
 	    }
 	    

@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="gradient-background" stylesheets="@../../resources/styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fog.test.charts.resources.EnergyChartController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="gradient-background" stylesheets="@../../resources/styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fog.test.charts.resources.TupleExecChartController">
    <center>
-      <ScatterChart fx:id="energyConsumption" prefHeight="325.0" prefWidth="600.0" styleClass="line-color" stylesheets="@../resources/styles.css" BorderPane.alignment="CENTER">
+      <ScatterChart fx:id="tupleExecution" prefHeight="325.0" prefWidth="600.0" styleClass="line-color" stylesheets="@../resources/styles.css" BorderPane.alignment="CENTER">
         <xAxis>
           <CategoryAxis side="BOTTOM" fx:id="xAxis" />
         </xAxis>
