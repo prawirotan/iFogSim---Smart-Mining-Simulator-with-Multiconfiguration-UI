@@ -68,7 +68,7 @@ public class NetworkChartController implements Initializable{
 				if (counter%3==0) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'k') {
+						if (data.charAt(i) == 'k') { //networkUsage
 							StringBuilder value_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
 								value_string.append(data.charAt(j));
@@ -81,7 +81,7 @@ public class NetworkChartController implements Initializable{
 				else if (counter%3==1) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'g') {
+						if (data.charAt(i) == 'g') { //configuration
 							StringBuilder key_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
 								key_string.append(data.charAt(j));
@@ -94,7 +94,7 @@ public class NetworkChartController implements Initializable{
 				else if (counter%3==2) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'd') {
+						if (data.charAt(i) == 'd') { //cloud network usage
 							StringBuilder cloud_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
 								cloud_string.append(data.charAt(j));
@@ -111,8 +111,8 @@ public class NetworkChartController implements Initializable{
 			XYChart.Series series2 = new XYChart.Series<>();
 			for (int i=0; i<value.size(); i++) {
 				
-				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i), value.get(i));
-				final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud"+key.get(i), cloudValue.get(i));
+				final XYChart.Data<String, Number> data1 = new XYChart.Data("F,G,C,S = "+key.get(i), value.get(i));
+				final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud, "+key.get(i), cloudValue.get(i));
 				data1.nodeProperty().addListener(new ChangeListener<Node>() {
 			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
 			          if (node != null) {      

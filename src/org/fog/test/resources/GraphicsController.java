@@ -152,13 +152,19 @@ public class GraphicsController implements Initializable {
 	    
 	    String currentNetworkUsageKey;
 	    Double currentNetworkUsageValue;
+	    
 	    String currentCloudUsageKey;
 	    Double currentCloudUsageValue;
+	    
 	    String currentCloudEnergyConKey;
 	    Long currentCloudEnergyConValue;
 	    
+	    Double currentAppLoopDelayValue = 0.0;
+	    
+	    
 	    List<String> currentEnergyConKey = new ArrayList<String>();
 	    List<Double> currentEnergyConValue = new ArrayList<Double>();
+	    
 	    
 	    
 	    
@@ -362,6 +368,7 @@ public class GraphicsController implements Initializable {
 					});
 					//series2.getData().add(new XYChart.Data<String, Double>("Loop "+(i+1), appLoopData.get(i)));
 					series2.getData().add(dataAppLoop);
+					currentAppLoopDelayValue = appLoopData.get(i);
 				}
 				appLoopDelayUsageChart.getData().add(series2);
 				
@@ -625,10 +632,19 @@ public class GraphicsController implements Initializable {
 	    	        	bw.newLine();
 	    	        	bw.write("Cloud"+ currentCloudEnergyConKey);
 	    	        	bw.newLine();
-	    	        	System.out.println(cloudConfig);
 	    	        	bw.write("Cloud?Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
 	    	        	bw.newLine();
 	    	        }
+	    		} catch (IOException e) {
+	    	        e.printStackTrace();
+	    	    }
+	    	}
+	    	if (currentAppLoopDelayValue != 0.0) {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("app-delay.txt", true))) {
+	    	        bw.write("Loop" + currentAppLoopDelayValue);
+	    	        bw.newLine();
+	    	        bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
+	    	        bw.newLine();
 	    		} catch (IOException e) {
 	    	        e.printStackTrace();
 	    	    }

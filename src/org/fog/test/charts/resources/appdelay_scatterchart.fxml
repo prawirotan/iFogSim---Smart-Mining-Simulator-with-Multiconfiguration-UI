@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.ScatterChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="gradient-background" stylesheets="@../../resources/styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fog.test.charts.resources.AppDelayChartController">
+   <center>
+      <ScatterChart fx:id="appDelayLoop" prefHeight="325.0" prefWidth="600.0" styleClass="line-color" stylesheets="@../resources/styles.css" BorderPane.alignment="CENTER">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" fx:id="xAxis" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="yAxis" side="LEFT" />
+        </yAxis>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </ScatterChart>
+   </center>
+   <top>
+      <VBox prefHeight="61.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="43.0" prefWidth="601.0" text="Application Delay Scatter Chart" textAlignment="CENTER" textFill="#ffd68a">
+               <font>
+                  <Font name="Lato Black" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+            </Label>
+            <Button fx:id="searchFile" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#searchFileOnClick" prefHeight="25.0" prefWidth="633.0" styleClass="container" stylesheets="@../resources/styles.css" text="Click here to Search File" textAlignment="CENTER">
+               <font>
+                  <Font size="15.0" />
+               </font></Button>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>

@@ -28,7 +28,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class EnergyChartController implements Initializable {
+public class AppDelayChartController implements Initializable {
 
 	
 	@FXML
@@ -38,28 +38,25 @@ public class EnergyChartController implements Initializable {
     @FXML
     private CategoryAxis xAxis;
     @FXML
-    private ScatterChart<String, Double> energyConsumption;
-    
-    File file = null;
-    List<Double> value = new ArrayList<Double>();
+    private ScatterChart<String, Double> appDelayLoop;
+	
+	File file = null;
+	List<Double> value = new ArrayList<Double>();
 	List<String> key = new ArrayList<String>();
-	List<String> configKey = new ArrayList<String>();
-	List<Long> cloudEnergyValue = new ArrayList<Long>();
-	List<String> cloudString = new ArrayList<String>();
-	List<String> configCloudKey = new ArrayList<String>();
+	List<Double> cloudValue = new ArrayList<Double>();
+	
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		xAxis.setLabel("Configuration");
-        yAxis.setLabel("Energy Consumption");
+        yAxis.setLabel("Delay Time");
         xAxis.setAnimated(false);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@FXML
 	void searchFileOnClick(ActionEvent event) {
-		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		file = fileChooser.showOpenDialog(new Stage());
@@ -67,12 +64,10 @@ public class EnergyChartController implements Initializable {
 
 		try (Scanner scanner = new Scanner(file)) {
 			while (scanner.hasNext()) {
-				System.out.println(counter);
-				if (counter%3==0) {
+				if (counter%2==0) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == '!') {
-							System.out.println("ENERGY!");
+						if (data.charAt(i) == 'p') {
 							StringBuilder value_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
 								value_string.append(data.charAt(j));
@@ -80,22 +75,12 @@ public class EnergyChartController implements Initializable {
 							value.add(Double.parseDouble(value_string.toString()));
 							break;
 						}
-						else if (data.charAt(i) == '.') {
-							System.out.println("CLOUD ENERGY!");
-							StringBuilder cloudVal_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								cloudVal_string.append(data.charAt(j));
-							}
-							cloudEnergyValue.add(Long.parseLong(cloudVal_string.toString()));
-							break;
-						}
 					}
 				}
-				else if (counter%3==1) {
+				else if (counter%2==1) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'e') {
-							System.out.println("DEVICE NAME!");
+						if (data.charAt(i) == 'g') {
 							StringBuilder key_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
 								key_string.append(data.charAt(j));
@@ -103,83 +88,39 @@ public class EnergyChartController implements Initializable {
 							key.add(key_string.toString());
 							break;
 						}
-						else if (data.charAt(i) == 'd') {
-							System.out.println("CLOUD NAME!");
-							StringBuilder cloud_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								cloud_string.append(data.charAt(j));
-							}
-							cloudString.add(cloud_string.toString());
-							break;
-						}
-					}
-				}
-				else if (counter%3==2) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'g') {
-							System.out.println("DEVICE CONFIG!");
-							StringBuilder configKey_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								configKey_string.append(data.charAt(j));
-							}
-							configKey.add(configKey_string.toString());
-							break;
-						}
-						else if (data.charAt(i) == '?') {
-							System.out.println("CLOUD DEVICE CONFIG!");
-							StringBuilder configCloudKey_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								configCloudKey_string.append(data.charAt(j));
-							}
-							configCloudKey.add(configCloudKey_string.toString());
-							System.out.println(configCloudKey.size());
-							break;
-							
-						}
 					}
 				}
 				counter++;
 			}
-				
+			
 			XYChart.Series series1 = new XYChart.Series<>();
-			XYChart.Series series2 = new XYChart.Series<>();
-				
+
 			for (int i=0; i<value.size(); i++) {
-					
-				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i)+" F,G,C,S = "+configKey.get(i), value.get(i));	
-				data1.nodeProperty().addListener(new ChangeListener<Node>() {
-				       @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-				         if (node != null) {      
-				           displayLabelForData(data1);
-				         } 
-				       }
-				});
-				series1.getData().add(data1);
-			}
 				
-			for (int i=0; i<cloudEnergyValue.size(); i++) {	
-				System.out.println("CLOUD COME");
-				System.out.println("CloudEnergy"+configKey.get(i)+" "+cloudEnergyValue.get(i));
-				final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud_Consumption, F,G,C,S = "+configCloudKey.get(i), cloudEnergyValue.get(i));
-				data2.nodeProperty().addListener(new ChangeListener<Node>() {
-				       public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-				         if (node != null) {      
-				           displayLabelForData(data2);
-				         } 
-				       }
+				final XYChart.Data<String, Number> data1 = new XYChart.Data("App Loops(GAS, CH, RS) "+key.get(i), value.get(i));
+				
+				data1.nodeProperty().addListener(new ChangeListener<Node>() {
+			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+			          if (node != null) {      
+			            displayLabelForData(data1);
+			          } 
+			        }
 				});
-				series2.getData().add(data2);
+
+				
+				series1.getData().add(data1);
+
+				//series1.getData().add(new XYChart.Data<String, Double>(key.get(i), value.get(i)));
+				//series2.getData().add(new XYChart.Data<String, Double>("Cloud"+key.get(i), cloudValue.get(i)));
 			}
 			
-			energyConsumption.getData().add(series1);
-			energyConsumption.getData().add(series2);
-				
+			appDelayLoop.getData().add(series1);
 				
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
+
 	}
 	
 	private void displayLabelForData(XYChart.Data<String, Number> data) {
@@ -214,5 +155,6 @@ public class EnergyChartController implements Initializable {
 	    bd = bd.setScale(places, RoundingMode.HALF_UP);
 	    return bd.doubleValue();
 	}
-	
+
 }
+
