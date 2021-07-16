@@ -39,6 +39,9 @@ public class CloudEnergyChartController implements Initializable {
 	@FXML
 	private LineChart<String, Double> cloudEnergyConsumption;
 	
+	int fogComparisonBreak = 6;
+    int sensorComparisonBreak = 8;
+	
 	File file = null;
 	List<String> configKey = new ArrayList<String>();
 	List<Long> cloudEnergyValue = new ArrayList<Long>();
@@ -61,83 +64,177 @@ public class CloudEnergyChartController implements Initializable {
 		fileChooser.setTitle("Open Resource File");
 		file = fileChooser.showOpenDialog(new Stage());
 		int counter = 0;
+		
+		searchFile.setVisible(false);
+		
+		if (file.toString().endsWith("cloud-energy-con.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					System.out.println(counter);
+					if (counter%3==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '.') {
+								System.out.println("CLOUD ENERGY!");
+								StringBuilder cloudVal_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									cloudVal_string.append(data.charAt(j));
+								}
+								cloudEnergyValue.add(Long.parseLong(cloudVal_string.toString()));
+								break;
+							}
+						}
+					}
+					else if (counter%3==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'd') {
+								System.out.println("CLOUD NAME!");
+								StringBuilder cloud_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									cloud_string.append(data.charAt(j));
+								}
+								cloudString.add(cloud_string.toString());
+								break;
+							}
+						}
+					}
+					else if (counter%3==2) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '?') {
+								System.out.println("CLOUD DEVICE CONFIG!");
+								StringBuilder configCloudKey_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									configCloudKey_string.append(data.charAt(j));
+								}
+								configCloudKey.add(configCloudKey_string.toString());
+								break;
+								
+							}
+						}
+					}
+					counter++;
+				}
+					
+				XYChart.Series series1 = new XYChart.Series<>();
+				XYChart.Series series2 = new XYChart.Series<>();
+				
+				series1.setName("Cloud Device, Cloudward Mapping");
+				series2.setName("Cloud Device, Edgeward Mapping");
+					
+				int configCount = 0;
+				for (int i=0; i<cloudEnergyValue.size(); i++) {	
+					System.out.println("CLOUD COME");
+					System.out.println("CloudEnergy"+configCloudKey.get(i)+" "+cloudEnergyValue.get(i));
+					final XYChart.Data<String, Number> data1 = new XYChart.Data(""+configCloudKey.get(i), cloudEnergyValue.get(i));
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					       public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					         if (node != null) {      
+					           displayLabelForData(data1);
+					         } 
+					       }
+					});
+					if (configCount < fogComparisonBreak) {
+						series1.getData().add(data1);
+					}
+					else if (configCount >= fogComparisonBreak) {
+						series2.getData().add(data1);
+					}
+					configCount++;
+				}
+				
+				cloudEnergyConsumption.getData().add(series1);
+				cloudEnergyConsumption.getData().add(series2);	
+					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
+		
+		else if (file.toString().endsWith("cloud-energy-con-sensor.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					System.out.println(counter);
+					if (counter%3==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '.') {
+								System.out.println("CLOUD ENERGY!");
+								StringBuilder cloudVal_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									cloudVal_string.append(data.charAt(j));
+								}
+								cloudEnergyValue.add(Long.parseLong(cloudVal_string.toString()));
+								break;
+							}
+						}
+					}
+					else if (counter%3==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'd') {
+								System.out.println("CLOUD NAME!");
+								StringBuilder cloud_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									cloud_string.append(data.charAt(j));
+								}
+								cloudString.add(cloud_string.toString());
+								break;
+							}
+						}
+					}
+					else if (counter%3==2) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '?') {
+								System.out.println("CLOUD DEVICE CONFIG!");
+								StringBuilder configCloudKey_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									configCloudKey_string.append(data.charAt(j));
+								}
+								configCloudKey.add(configCloudKey_string.toString());
+								break;
+								
+							}
+						}
+					}
+					counter++;
+				}
+					
+				XYChart.Series series1 = new XYChart.Series<>();
+				
+				series1.setName("Cloud Device, Sensor and Mapping Configuration");
 
-		try (Scanner scanner = new Scanner(file)) {
-			while (scanner.hasNext()) {
-				System.out.println(counter);
-				if (counter%3==0) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == '.') {
-							System.out.println("CLOUD ENERGY!");
-							StringBuilder cloudVal_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								cloudVal_string.append(data.charAt(j));
-							}
-							cloudEnergyValue.add(Long.parseLong(cloudVal_string.toString()));
-							break;
-						}
+				int configCount = 0;
+				for (int i=0; i<cloudEnergyValue.size(); i++) {	
+					System.out.println("CLOUD COME");
+					System.out.println("CloudEnergy"+configCloudKey.get(i)+" "+cloudEnergyValue.get(i));
+					final XYChart.Data<String, Number> data1 = new XYChart.Data(""+configCloudKey.get(i), cloudEnergyValue.get(i));
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					       public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					         if (node != null) {      
+					           displayLabelForData(data1);
+					         } 
+					       }
+					});
+					if (configCount <= sensorComparisonBreak) {
+						series1.getData().add(data1);
 					}
+					configCount++;
 				}
-				else if (counter%3==1) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'd') {
-							System.out.println("CLOUD NAME!");
-							StringBuilder cloud_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								cloud_string.append(data.charAt(j));
-							}
-							cloudString.add(cloud_string.toString());
-							break;
-						}
-					}
-				}
-				else if (counter%3==2) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == '?') {
-							System.out.println("CLOUD DEVICE CONFIG!");
-							StringBuilder configCloudKey_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								configCloudKey_string.append(data.charAt(j));
-							}
-							configCloudKey.add(configCloudKey_string.toString());
-							break;
-							
-						}
-					}
-				}
-				counter++;
-			}
 				
-			XYChart.Series series1 = new XYChart.Series<>();
-			
-			System.out.println(cloudEnergyValue.size());
-				
-			for (int i=0; i<cloudEnergyValue.size(); i++) {	
-				System.out.println("CLOUD COME");
-				System.out.println("CloudEnergy"+configCloudKey.get(i)+" "+cloudEnergyValue.get(i));
-				final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud_Consumption "+configCloudKey.get(i), cloudEnergyValue.get(i));
-				data2.nodeProperty().addListener(new ChangeListener<Node>() {
-				       public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-				         if (node != null) {      
-				           displayLabelForData(data2);
-				         } 
-				       }
-				});
-				series1.getData().add(data2);
-			}
-			
-			//energyConsumption.getData().add(series1);
-			cloudEnergyConsumption.getData().add(series1);
-				
-				
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+				cloudEnergyConsumption.getData().add(series1);
+					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
 	}
+
+		
 	
 	private void displayLabelForData(XYChart.Data<String, Number> data) {
 		  final Node node = data.getNode();

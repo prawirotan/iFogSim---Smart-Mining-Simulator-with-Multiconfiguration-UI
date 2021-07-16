@@ -114,8 +114,6 @@ public class GraphicsController implements Initializable {
 	    @FXML
 	    private Label configurations;
 	    @FXML
-	    private Button saveButton;
-	    @FXML
 	    private Label simExecutionTimeUpdate;
 	    @FXML
 	    private Label simExecConfig;
@@ -124,7 +122,7 @@ public class GraphicsController implements Initializable {
 	    @FXML
 	    private Button customFogOK;
 	    @FXML
-	    private Button saveButtonFogMetric;
+	    private Button saveButtonMasterNodeMetric;
 	    @FXML
 	    private Button saveButtonSensorMetric;
 	    
@@ -339,12 +337,11 @@ public class GraphicsController implements Initializable {
 				cloudLabel.setVisible(false);
 				yesCloud.setVisible(false);
 				noCloud.setVisible(false);
-				saveButton.setVisible(true);
 				simExecutionTimeUpdate.setText(simExecutionTimeInt+" MS");
 				simExecConfig.setVisible(true);
 				customFogInput.setVisible(false);
 				customFogOK.setVisible(false);
-				saveButtonFogMetric.setVisible(true);
+				saveButtonMasterNodeMetric.setVisible(true);
 				saveButtonSensorMetric.setVisible(true);
 				
 				System.out.println("NEXT TASK!");
@@ -399,10 +396,9 @@ public class GraphicsController implements Initializable {
 					});
 					//series2.getData().add(new XYChart.Data<String, Double>("Loop "+(i+1), appLoopData.get(i)));
 					series2.getData().add(dataAppLoop);
-					currentAppLoopDelayValue = appLoopData;
 				}
 				appLoopDelayUsageChart.getData().add(series2);
-				
+				currentAppLoopDelayValue = SmartMiningMain.getAppLoopDelayOutput();
 				//###################################################################################
 				
 				//energy Consumption
@@ -653,110 +649,7 @@ public class GraphicsController implements Initializable {
 	    
 	    
 	    @FXML
-	    void saveToFile(ActionEvent event) {
-	    	
-	    	if (currentNetworkUsageKey == "Network Usage") {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("network-usage.txt", true))) {
-	    	        bw.write("Network" + currentNetworkUsageValue);
-	    	        bw.newLine();
-	    	        bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
-	    	        bw.newLine();
-	    	        bw.write("Cloud" + currentCloudUsageValue);
-	    	        bw.newLine();
-	    		} catch (IOException e) {
-	    	        e.printStackTrace();
-	    	    }
-	    	}
-	    	if (currentEnergyConKey.isEmpty()==false && currentCloudEnergyConKey.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("energy-con.txt", true))) {
-	    	        for (int i=0; i<currentEnergyConKey.size(); i++) {
-	    	        	bw.write("Energy!" + currentEnergyConValue.get(i));
-	    	        	bw.newLine();
-	    	        	bw.write("Name" + currentEnergyConKey.get(i));
-	    	        	bw.newLine();
-	    	        	bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
-	    	        	bw.newLine();
-	    	        }
-	    	        for (int i=0; i<1; i++) {
-	    	        	bw.write("CloudE." + currentCloudEnergyConValue);
-	    	        	bw.newLine();
-	    	        	bw.write("Cloud"+ currentCloudEnergyConKey);
-	    	        	bw.newLine();
-	    	        	bw.write("Cloud?Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
-	    	        	bw.newLine();
-	    	        }
-	    		} catch (IOException e) {
-	    	        e.printStackTrace();
-	    	    }
-	    	}
-	    	if (currentAppLoopDelayValue.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("app-delay.txt", true))) {
-	    	        for (int i=0; i<currentAppLoopDelayValue.size(); i++) {
-	    	        	bw.write("Loop" + (i+1) + currentAppLoopDelayValue.get(i));
-		    	        bw.newLine();
-		    	        bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
-		    	        bw.newLine();
-	    	        }
-	    		} catch (IOException e) {
-	    	        e.printStackTrace();
-	    	    }
-	    	}
-	    	if (currentTupleExecKey.isEmpty()==false && currentTupleExecValue.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("tuple-exec.txt", true))) {
-	    	        for (int i=0; i<currentTupleExecKey.size(); i++) {
-	    	        	bw.write("Tuple@" + currentTupleExecValue.get(i));
-	    	        	bw.newLine();
-	    	        	bw.write("Name?" + currentTupleExecKey.get(i));
-	    	        	bw.newLine();
-	    	        	bw.write("Config" + fogConfig.getText() + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
-	    	        	bw.newLine();
-	    	        }
-	    		} catch (IOException e) {
-	    			e.printStackTrace();
-	    		}
-	    	}
-	    }
-	    
-	    @FXML
-	    void saveToFileTotal() {
-	        
-	    	try (BufferedWriter bw = new BufferedWriter(new FileWriter("fog-device-metric.txt", true))) {
-	    	       bw.write("NetworkUsage~" + currentNetworkUsageValue);
-	    	       bw.newLine();
-	    	       bw.write("CloudUsage~" + currentCloudUsageValue);
-	    	       bw.newLine();
-	    	       for (int i=0; i<currentEnergyConKey.size(); i++) {
-	    	        	bw.write("Energy~" + currentEnergyConValue.get(i));
-	    	        	bw.newLine();
-	    	        	bw.write("EnergyName:" + currentEnergyConKey.get(i));
-	    	        	bw.newLine();
-	    	        }
-	    	        for (int i=0; i<1; i++) {
-	    	        	bw.write("CloudEnergy~" + currentCloudEnergyConValue);
-	    	        	bw.newLine();
-	    	        	bw.write("CloudName:" + currentCloudEnergyConKey);
-	    	        	bw.newLine();
-	    	        }
-	    	        for (int i=0; i<currentAppLoopDelayValue.size(); i++) {
-	    	        	bw.write("Loop" + (i+1) + currentAppLoopDelayValue.get(i));
-		    	        bw.newLine();
-	    	        }
-	    	        for (int i=0; i<currentTupleExecKey.size(); i++) {
-	    	        	bw.write("Tuple~" + currentTupleExecValue.get(i));
-	    	        	bw.newLine();
-	    	        	bw.write("Name:" + currentTupleExecKey.get(i));
-	    	        	bw.newLine();
-	    	        	bw.write("Config!" + fogConfig.getText());
-	    	        	bw.newLine();
-	    	        }
-	    	        
-	    	} catch (IOException e) {
-	    	        e.printStackTrace();
-	    	}
-	    }
-	    
-	    @FXML
-	    void saveToFileFogMetric() {
+	    void saveToFileMasterNodeMetric() {
 	    	if (currentNetworkUsageKey == "Network Usage") {
 	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("network-usage.txt", true))) {
 	    			bw.newLine();
@@ -786,14 +679,14 @@ public class GraphicsController implements Initializable {
 	    	    }
 	    	}
 	    	if (currentCloudEnergyConKey.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("cloudenergy-con.txt", true))) {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("cloud-energy-con.txt", true))) {
     				bw.newLine();
 	    			for (int i=0; i<1; i++) {
 		    	        bw.write("CloudE." + currentCloudEnergyConValue);
 		    	        bw.newLine();
 		    	        bw.write("Cloud"+ currentCloudEnergyConKey);
 		    	        bw.newLine();
-		    	        bw.write("Cloud?Config" + fogConfig.getText());
+		    	        bw.write("Cloud?" + fogConfig.getText());
 		    	        bw.newLine();
 		    	    }
 	    		} catch (IOException e) {
@@ -805,7 +698,7 @@ public class GraphicsController implements Initializable {
 	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("app-delay.txt", true))) {
     	        	bw.newLine();
 	    	        for (int i=0; i<currentAppLoopDelayValue.size(); i++) {
-	    	        	bw.write("Loop" + (i+1) + currentAppLoopDelayValue.get(i));
+	    	        	bw.write("Loop" + (i+1) + "@" + currentAppLoopDelayValue.get(i));
 		    	        bw.newLine();
 		    	        bw.write("Config" + fogConfig.getText());
 		    	        bw.newLine();
@@ -834,8 +727,9 @@ public class GraphicsController implements Initializable {
 	    @FXML
 	    void saveToFileSensorMetric() {
 	    	if (currentNetworkUsageKey == "Network Usage") {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("network-usage.txt", true))) {
-	    	        bw.write("Network" + currentNetworkUsageValue);
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("network-usage-sensor.txt", true))) {
+	    			bw.newLine();
+	    			bw.write("Network" + currentNetworkUsageValue);
 	    	        bw.newLine();
 	    	        bw.write("Config" + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
 	    	        bw.newLine();
@@ -846,8 +740,9 @@ public class GraphicsController implements Initializable {
 	    	    }
 	    	}
 	    	if (currentEnergyConKey.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("energy-con.txt", true))) {
-	    	        for (int i=0; i<currentEnergyConKey.size(); i++) {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("energy-con-sensor.txt", true))) {
+	    			bw.newLine();
+	    			for (int i=0; i<currentEnergyConKey.size(); i++) {
 	    	        	bw.write("Energy!" + currentEnergyConValue.get(i));
 	    	        	bw.newLine();
 	    	        	bw.write("Name" + currentEnergyConKey.get(i));
@@ -868,13 +763,14 @@ public class GraphicsController implements Initializable {
 	    	    }
 	    	}
 	    	if (currentCloudEnergyConKey.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("cloudenergy-con.txt", true))) {
-	    			 for (int i=0; i<1; i++) {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("cloud-energy-con-sensor.txt", true))) {
+	    			bw.newLine(); 
+	    			for (int i=0; i<1; i++) {
 		    	        bw.write("CloudE." + currentCloudEnergyConValue);
 		    	        bw.newLine();
 		    	        bw.write("Cloud"+ currentCloudEnergyConKey);
 		    	        bw.newLine();
-		    	        bw.write("Cloud?Config" + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
+		    	        bw.write("Cloud?" + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
 		    	        bw.newLine();
 		    	    }
 	    		} catch (IOException e) {
@@ -883,9 +779,10 @@ public class GraphicsController implements Initializable {
 				}
 	    	} 
 	    	if (currentAppLoopDelayValue.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("app-delay.txt", true))) {
-	    	        for (int i=0; i<currentAppLoopDelayValue.size(); i++) {
-	    	        	bw.write("Loop" + (i+1) + currentAppLoopDelayValue.get(i));
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("app-delay-sensor.txt", true))) {
+	    			bw.newLine();
+	    			for (int i=0; i<currentAppLoopDelayValue.size(); i++) {
+	    	        	bw.write("Loop" + (i+1) + "@" + currentAppLoopDelayValue.get(i));
 		    	        bw.newLine();
 		    	        bw.write("Config" + gasConfig.getText() + chConfig.getText() + srConfig.getText() + cloudConfig.getText());
 		    	        bw.newLine();
@@ -895,8 +792,9 @@ public class GraphicsController implements Initializable {
 	    	    }
 	    	}
 	    	if (currentTupleExecKey.isEmpty()==false && currentTupleExecValue.isEmpty()==false) {
-	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("tuple-exec.txt", true))) {
-	    	        for (int i=0; i<currentTupleExecKey.size(); i++) {
+	    		try (BufferedWriter bw = new BufferedWriter(new FileWriter("tuple-exec-sensor.txt", true))) {
+	    			bw.newLine();
+	    			for (int i=0; i<currentTupleExecKey.size(); i++) {
 	    	        	bw.write("Tuple@" + currentTupleExecValue.get(i));
 	    	        	bw.newLine();
 	    	        	bw.write("Name?" + currentTupleExecKey.get(i));
@@ -916,11 +814,11 @@ public class GraphicsController implements Initializable {
 	    void cloudConfigure(ActionEvent event) {
 	    	if (event.getSource() == yesCloud) {
 	    		SmartMiningMain.setCloud(true);
-	    		cloudConfig.setText("YES");
+	    		cloudConfig.setText("CLOUD");
 	    	}
 	    	else if (event.getSource() == noCloud) {
 	    		SmartMiningMain.setCloud(false);
-	    		cloudConfig.setText("NO");
+	    		cloudConfig.setText("EDGE");
 	    	}
 	    }
 
@@ -953,18 +851,17 @@ public class GraphicsController implements Initializable {
 	        gasConfig.setText("1");
 	        chConfig.setText("1");
 	        srConfig.setText("1");
-	        cloudConfig.setText("NO");
+	        cloudConfig.setText("EDGE");
 	        simExecConfig.setVisible(false);
 	        
-	        saveButton.setVisible(false);
-	        saveButtonFogMetric.setVisible(false);
+	        saveButtonMasterNodeMetric.setVisible(false);
 	        saveButtonSensorMetric.setVisible(false);
 			
 		}
 		
 		private void displayLabelForData(XYChart.Data<String, Number> data) {
 			  final Node node = data.getNode();
-			  final Text dataText = new Text(round(data.getYValue().doubleValue(), 1) + "");
+			  final Text dataText = new Text(round(data.getYValue().doubleValue(), 2) + "");
 			  node.parentProperty().addListener(new ChangeListener<Parent>() {
 			    @Override public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
 			      Group parentGroup = (Group) parent;
@@ -981,7 +878,7 @@ public class GraphicsController implements Initializable {
 			      );
 			      dataText.setLayoutY(
 			        Math.round(
-			          bounds.getMinY() - dataText.prefHeight(-1) * 0.1
+			          bounds.getMinY() - dataText.prefHeight(-1) * 0.00001
 			        )
 			      );
 			    }

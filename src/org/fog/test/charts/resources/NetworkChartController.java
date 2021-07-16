@@ -41,6 +41,9 @@ public class NetworkChartController implements Initializable{
     private CategoryAxis xAxis;
     @FXML
     private LineChart<String, Double> networkUsages;
+    
+    int fogComparisonBreak = 6;
+    int sensorComparisonBreak = 8;
 	
 	File file = null;
 	List<Double> value = new ArrayList<Double>();
@@ -63,99 +66,192 @@ public class NetworkChartController implements Initializable{
 		fileChooser.setTitle("Open Resource File");
 		file = fileChooser.showOpenDialog(new Stage());
 		int counter = 0;
-
-		try (Scanner scanner = new Scanner(file)) {
-			while (scanner.hasNext()) {
-				if (counter%3==0) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'k') { //networkUsage
-							StringBuilder value_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								value_string.append(data.charAt(j));
+		
+		searchFile.setVisible(false);
+		
+		if (file.toString().endsWith("network-usage.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					if (counter%3==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'k') { //networkUsage
+								StringBuilder value_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									value_string.append(data.charAt(j));
+								}
+								value.add(Double.parseDouble(value_string.toString()));
+								break;
 							}
-							value.add(Double.parseDouble(value_string.toString()));
-							break;
 						}
 					}
-				}
-				else if (counter%3==1) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'g') { //configuration
-							StringBuilder key_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {				//EDIT
-								key_string.append(data.charAt(j));
+					else if (counter%3==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'g') { //configuration
+								StringBuilder key_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {				//EDIT
+									key_string.append(data.charAt(j));
+								}
+								key.add(key_string.toString());
+								break;
 							}
-							key.add(key_string.toString());
-							break;
 						}
 					}
-				}
-				else if (counter%3==2) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'd') { //cloud network usage
-							StringBuilder cloud_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								cloud_string.append(data.charAt(j));
+					else if (counter%3==2) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'd') { //cloud network usage
+								StringBuilder cloud_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									cloud_string.append(data.charAt(j));
+								}
+								cloudValue.add(Double.parseDouble(cloud_string.toString()));
+								break;
 							}
-							cloudValue.add(Double.parseDouble(cloud_string.toString()));
-							break;
 						}
 					}
+					counter++;
 				}
-				counter++;
-			}
-			
-			//int configCounter = 0;
-			XYChart.Series series1 = new XYChart.Series<>();
-			XYChart.Series series2 = new XYChart.Series<>();
-			//XYChart.Series series3 = new XYChart.Series<>();
-			//XYChart.Series series4 = new XYChart.Series<>();
-			for (int i=0; i<value.size(); i++) {
-				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i), value.get(i));
-				final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud, "+key.get(i), cloudValue.get(i));
-				data1.nodeProperty().addListener(new ChangeListener<Node>() {
-			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-			          if (node != null) {      
-			            displayLabelForData(data1);
-			          } 
-			        }
-				});
 				
-				data2.nodeProperty().addListener(new ChangeListener<Node>() {
-			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-			          if (node != null) {      
-			            displayLabelForData(data2);
-			          } 
-			        }
-				});
-				/*if (configCounter<6) {
-					series1.getData().add(data1);
-					series2.getData().add(data2);
-				}*/
-				/*else if (configCounter >= 6) {
-					System.out.println("Goes here");
-					series3.getData().add(data1);
-					series4.getData().add(data2);
-				}
-				//series1.getData().add(new XYChart.Data<String, Double>(key.get(i), value.get(i)));
-				//series2.getData().add(new XYChart.Data<String, Double>("Cloud"+key.get(i), cloudValue.get(i)));
-				configCounter++;*/
-			}
-			
-			networkUsages.getData().add(series1);
-			networkUsages.getData().add(series2);
-			//networkUsages.getData().add(series3);
-			//networkUsages.getData().add(series4);
+				int configCounter = 0;
+				XYChart.Series series1 = new XYChart.Series<>();
+				XYChart.Series series2 = new XYChart.Series<>();
+				XYChart.Series series3 = new XYChart.Series<>();
+				XYChart.Series series4 = new XYChart.Series<>();
 				
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				series1.setName("Fog Devices, Cloudward Mapping");
+				series2.setName("Cloud Device, Cloudward Mapping");
+				series3.setName("Fog Devices, Edgeward Mapping");
+				series4.setName("Cloud Device, Edgeward Mapping");
+				for (int i=0; i<value.size(); i++) {
+					final XYChart.Data<String, Number> data1 = new XYChart.Data("Fog Device, "+key.get(i), value.get(i));
+					final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud, "+key.get(i), cloudValue.get(i));
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(data1);
+				          } 
+				        }
+					});
+					
+					data2.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(data2);
+				          } 
+				        }
+					});
+					if (configCounter < fogComparisonBreak) {
+						series1.getData().add(data1);
+						series2.getData().add(data2);
+					}
+					else if (configCounter >= fogComparisonBreak) {
+						series3.getData().add(data1);
+						series4.getData().add(data2);
+					}
+					configCounter++;
+				}
+				
+				networkUsages.getData().add(series1);
+				networkUsages.getData().add(series2);
+				networkUsages.getData().add(series3);
+				networkUsages.getData().add(series4);
+					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		else if (file.toString().endsWith("network-usage-sensor.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					if (counter%3==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'k') { //networkUsage
+								StringBuilder value_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									value_string.append(data.charAt(j));
+								}
+								value.add(Double.parseDouble(value_string.toString()));
+								break;
+							}
+						}
+					}
+					else if (counter%3==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'g') { //configuration
+								StringBuilder key_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {				//EDIT
+									key_string.append(data.charAt(j));
+								}
+								key.add(key_string.toString());
+								break;
+							}
+						}
+					}
+					else if (counter%3==2) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'd') { //cloud network usage
+								StringBuilder cloud_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									cloud_string.append(data.charAt(j));
+								}
+								cloudValue.add(Double.parseDouble(cloud_string.toString()));
+								break;
+							}
+						}
+					}
+					counter++;
+				}
+				
+				int configCounter = 0;
+				XYChart.Series series1 = new XYChart.Series<>();
+				XYChart.Series series2 = new XYChart.Series<>();
 
+				series1.setName("Fog Devices, Edgeward Mapping");
+				series2.setName("Cloud Device, Edgeward Mapping");
+				for (int i=0; i<value.size(); i++) {
+					final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i), value.get(i));
+					final XYChart.Data<String, Number> data2 = new XYChart.Data(key.get(i), cloudValue.get(i));
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(data1);
+				          } 
+				        }
+					});
+					
+					data2.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(data2);
+				          } 
+				        }
+					});
+					if (configCounter <= sensorComparisonBreak) {
+						series1.getData().add(data1);
+						series2.getData().add(data2);
+					}
+					configCounter++;
+				}
+				
+				networkUsages.getData().add(series1);
+				networkUsages.getData().add(series2);
+					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 	}
+
+		
 	
 	private void displayLabelForData(XYChart.Data<String, Number> data) {
 		  final Node node = data.getNode();

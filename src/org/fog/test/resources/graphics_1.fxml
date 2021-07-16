@@ -55,7 +55,7 @@
                      <children>
                         <VBox prefHeight="100.0" prefWidth="292.0">
                            <children>
-                              <Label fx:id="fogLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="AMOUNT OF FOG DEVICES">
+                              <Label fx:id="fogLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="AMOUNT OF MASTER NODES">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
@@ -153,15 +153,15 @@
                      <children>
                         <VBox prefHeight="100.0" prefWidth="292.0">
                            <children>
-                              <Label fx:id="cloudLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="CLOUD">
+                              <Label fx:id="cloudLabel" alignment="CENTER" prefHeight="74.0" prefWidth="275.0" text="MODULE PLACEMENT POLICY">
                                  <font>
                                     <Font name="Dubai Bold" size="16.0" />
                                  </font>
                               </Label>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Button fx:id="yesCloud" mnemonicParsing="false" onAction="#cloudConfigure" prefHeight="63.0" prefWidth="170.0" text="YES" />
-                                    <Button fx:id="noCloud" mnemonicParsing="false" onAction="#cloudConfigure" prefHeight="63.0" prefWidth="171.0" text="NO" />
+                                    <Button fx:id="yesCloud" mnemonicParsing="false" onAction="#cloudConfigure" prefHeight="63.0" prefWidth="170.0" text="CLOUDWARD" />
+                                    <Button fx:id="noCloud" mnemonicParsing="false" onAction="#cloudConfigure" prefHeight="63.0" prefWidth="171.0" text="EDGEWARD" />
                                  </children>
                               </HBox>
                            </children>
@@ -170,12 +170,7 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveToFile" prefHeight="93.0" prefWidth="295.0" text="SAVE TO DEFAULT FILES" textAlignment="CENTER" wrapText="true">
-                           <font>
-                              <Font name="Ebrima Bold" size="14.0" />
-                           </font>
-                        </Button>
-                        <Button fx:id="saveButtonFogMetric" mnemonicParsing="false" onAction="#saveToFileFogMetric" prefHeight="93.0" prefWidth="295.0" text="SAVE TOWARD FOG METRIC" textAlignment="CENTER" wrapText="true">
+                        <Button fx:id="saveButtonMasterNodeMetric" mnemonicParsing="false" onAction="#saveToFileMasterNodeMetric" prefHeight="93.0" prefWidth="295.0" text="SAVE TOWARD MASTER NODE METRIC" textAlignment="CENTER" wrapText="true">
                            <font>
                               <Font name="Ebrima Bold" size="11.0" />
                            </font>
@@ -202,7 +197,7 @@
                                        <children>
                                           <VBox prefHeight="100.0" prefWidth="199.0">
                                              <children>
-                                                <Label text="Fog Devices: ">
+                                                <Label text="Master Nodes: ">
                                                    <font>
                                                       <Font name="System Bold" size="18.0" />
                                                    </font>
@@ -222,7 +217,7 @@
                                                       <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
-                                                <Label text="Cloud: ">
+                                                <Label text="Module Placement: ">
                                                    <font>
                                                       <Font name="System Bold" size="18.0" />
                                                    </font>

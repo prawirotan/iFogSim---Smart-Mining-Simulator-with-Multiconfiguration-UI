@@ -41,6 +41,9 @@ public class EnergyChartController implements Initializable {
     @FXML
     private LineChart<String, Double> energyConsumption;
     
+    int fogComparisonBreak = 36;
+    int sensorComparisonBreak = 48;
+    
     File file = null;
     List<Double> value = new ArrayList<Double>();
 	List<String> key = new ArrayList<String>();
@@ -62,87 +65,171 @@ public class EnergyChartController implements Initializable {
 		fileChooser.setTitle("Open Resource File");
 		file = fileChooser.showOpenDialog(new Stage());
 		int counter = 0;
-
-		try (Scanner scanner = new Scanner(file)) {
-			while (scanner.hasNext()) {
-				System.out.println(counter);
-				if (counter%3==0) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == '!') {
-							System.out.println("ENERGY!");
-							StringBuilder value_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								value_string.append(data.charAt(j));
+		
+		searchFile.setVisible(false);
+		
+		if (file.toString().endsWith("energy-con.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					System.out.println(counter);
+					if (counter%3==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '!') {
+								System.out.println("ENERGY!");
+								StringBuilder value_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									value_string.append(data.charAt(j));
+								}
+								value.add(Double.parseDouble(value_string.toString()));
+								break;
 							}
-							value.add(Double.parseDouble(value_string.toString()));
-							break;
 						}
 					}
-				}
-				else if (counter%3==1) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'e') {
-							System.out.println("DEVICE NAME!");
-							StringBuilder key_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								key_string.append(data.charAt(j));
+					else if (counter%3==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'e') {
+								System.out.println("DEVICE NAME!");
+								StringBuilder key_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									key_string.append(data.charAt(j));
+								}
+								key.add(key_string.toString());
+								break;
 							}
-							key.add(key_string.toString());
-							break;
 						}
 					}
-				}
-				else if (counter%3==2) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'g') {
-							System.out.println("DEVICE CONFIG!");
-							StringBuilder configKey_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								configKey_string.append(data.charAt(j));
+					else if (counter%3==2) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'g') {
+								System.out.println("DEVICE CONFIG!");
+								StringBuilder configKey_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									configKey_string.append(data.charAt(j));
+								}
+								configKey.add(configKey_string.toString());
+								break;
 							}
-							configKey.add(configKey_string.toString());
-							break;
 						}
 					}
+					counter++;
 				}
-				counter++;
-			}
-				
-			XYChart.Series series1 = new XYChart.Series<>();
-			//XYChart.Series series2 = new XYChart.Series<>();
-				
-			int configCount = 0;
-			for (int i=0; i<value.size(); i++) {
 					
-				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i)+" "+configKey.get(i), value.get(i));	
-				data1.nodeProperty().addListener(new ChangeListener<Node>() {
-				       @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-				         if (node != null) {      
-				           displayLabelForData(data1);
-				         } 
-				       }
-				});
-				//if (configCount < 6) {
-					series1.getData().add(data1);
-				//}
-				/*else if (configCount >= 6) {
-					series2.getData().add(data1);
+				XYChart.Series series1 = new XYChart.Series<>();
+				XYChart.Series series2 = new XYChart.Series<>();
+				series1.setName("Fog Devices, Cloudward Mapping");
+				series2.setName("Fog Devices, Edgeward Mapping");
+					
+				int configCount = 0;
+				for (int i=0; i<value.size(); i++) {
+						
+					final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i)+" "+configKey.get(i), value.get(i));	
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					       @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					         if (node != null) {      
+					           displayLabelForData(data1);
+					         } 
+					       }
+					});
+					if (configCount < fogComparisonBreak) {
+						series1.getData().add(data1);
+					}
+					else if (configCount >= fogComparisonBreak) {
+						series2.getData().add(data1);
+					}
+					configCount++;
 				}
-				configCount++;*/
-			}
 
-			energyConsumption.getData().add(series1);
-			//energyConsumption.getData().add(series2);
-				
-				
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+				energyConsumption.getData().add(series1);
+				energyConsumption.getData().add(series2);
+					
+					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
+		
+		else if (file.toString().endsWith("energy-con-sensor.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					System.out.println(counter);
+					if (counter%3==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '!') {
+								System.out.println("ENERGY!");
+								StringBuilder value_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									value_string.append(data.charAt(j));
+								}
+								value.add(Double.parseDouble(value_string.toString()));
+								break;
+							}
+						}
+					}
+					else if (counter%3==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'e') {
+								System.out.println("DEVICE NAME!");
+								StringBuilder key_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									key_string.append(data.charAt(j));
+								}
+								key.add(key_string.toString());
+								break;
+							}
+						}
+					}
+					else if (counter%3==2) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'g') {
+								System.out.println("DEVICE CONFIG!");
+								StringBuilder configKey_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									configKey_string.append(data.charAt(j));
+								}
+								configKey.add(configKey_string.toString());
+								break;
+							}
+						}
+					}
+					counter++;
+				}
+					
+				XYChart.Series series1 = new XYChart.Series<>();
+				series1.setName("Sensor Configuration, Edgeward Mapping");
+					
+				int configCount = 0;
+				for (int i=0; i<value.size(); i++) {
+						
+					final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i)+" "+configKey.get(i), value.get(i));	
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					       @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					         if (node != null) {      
+					           displayLabelForData(data1);
+					         } 
+					       }
+					});
+					if (configCount <= sensorComparisonBreak) {
+						series1.getData().add(data1);
+					}
+					configCount++;
+				}
+
+				energyConsumption.getData().add(series1);					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
 	}
+
+		
 	
 	private void displayLabelForData(XYChart.Data<String, Number> data) {
 		  final Node node = data.getNode();

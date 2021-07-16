@@ -56,12 +56,12 @@ public class SmartMiningMain extends Application{
 	static List<Actuator> actuators = new ArrayList<Actuator>();
 	//Define the number of fog nodes will be deployed
 	static int numOfFogDevices = 3;
-	//Define the number of gas sensors with each fog nodes
-	static int numOfGasSensorsPerMasterNode=1;
-	//Define the number of chemical sensors with each fog nodes
-	static int numOfChSensorsPerMasterNode=1;
-	//Define the number of surrounding sensors with each fog nodes
-	static int numOfSrSensorsPerMasterNode=1;
+	//Define the number of gas micro -controllers with each fog nodes
+	static int numOfGasMCPerMasterNode=1;
+	//Define the number of chemical micro-controllers with each fog nodes
+	static int numOfChMCPerMasterNode=1;
+	//Define the number of surrounding micro-controllers with each fog nodes
+	static int numOfSrMCPerMasterNode=1;
 	//We are using the fog nodes to perform the operations.
 	//cloud is set to false
 	private static boolean CLOUD = false;
@@ -99,10 +99,7 @@ public class SmartMiningMain extends Application{
 	
 	
 	public static void startSmartMiningSimulator() {
-		
 
-				System.out.println(numOfFogDevices);
-				System.out.println(numOfGasSensorsPerMasterNode);
 				Log.printLine("Smart Mining System!");
 				try {
 					Log.disable();
@@ -149,11 +146,12 @@ public class SmartMiningMain extends Application{
 						}
 					}
 					
+					
 					controller = new Controller("master-controller", fogDevices, sensors, actuators);
 					
-					
+				
 					controller.submitApplication(application,
-					(CLOUD)?(new ModulePlacementMapping(fogDevices, application, moduleMapping))
+					(CLOUD)?(new ModulePlacementMapping(fogDevices, application, moduleMapping)) //maps all the application modules to the cloud
 							:(new ModulePlacementEdgewards(fogDevices, sensors, actuators, application, moduleMapping)));
 					
 					TimeKeeper.getInstance().setSimulationStartTime(Calendar.getInstance().getTimeInMillis());
@@ -200,29 +198,29 @@ public class SmartMiningMain extends Application{
 	}
 	
 	private static FogDevice addMasterNode(String id, int userId, String appId, int parentId){ //Master Module
-		FogDevice fognode = createFogDevice("a-"+id, 50000, 40000, 10000, 10000, 3, 0.0, 107.339, 83.4333);
+		FogDevice fognode = createFogDevice("a-"+id, 4744, 1000, 10000, 10000, 3, 0.0, 107.339, 83.4333);
 		fogDevices.add(fognode);
 		fognode.setUplinkLatency(1.0);
 		
-			for(int i=0;i<numOfGasSensorsPerMasterNode;i++){
+			for(int i=0;i<numOfGasMCPerMasterNode;i++){
 				String mobileId = id+"-"+i;
-				FogDevice gasSensor = addGasSensors(mobileId, userId, appId, fognode.getId());
+				FogDevice gasSensor = addGasMC(mobileId, userId, appId, fognode.getId());
 				gasSensor.setUplinkLatency(2);
 				fogDevices.add(gasSensor);
 				/*String mobileId = id+"-"+i;
 				addGasSensors(mobileId, userId, appId, fognode.getId());*/
 			}
-			for(int i=0;i<numOfChSensorsPerMasterNode;i++){
+			for(int i=0;i<numOfChMCPerMasterNode;i++){
 				String mobileId = id+"-"+i;
-				FogDevice chSensor = addChSensors(mobileId, userId, appId, fognode.getId());
+				FogDevice chSensor = addChMC(mobileId, userId, appId, fognode.getId());
 				chSensor.setUplinkLatency(2);
 				fogDevices.add(chSensor);
 				/*String mobileId = id+"-"+i;
 				addChSensors(mobileId, userId, appId, fognode.getId());*/
 			}
-			for(int i=0;i<numOfSrSensorsPerMasterNode;i++){	
+			for(int i=0;i<numOfSrMCPerMasterNode;i++){	
 				String mobileId = id+"-"+i;
-				FogDevice srSensor = addSrSensors(mobileId, userId, appId, fognode.getId());
+				FogDevice srSensor = addSrMC(mobileId, userId, appId, fognode.getId());
 				srSensor.setUplinkLatency(2);
 				fogDevices.add(srSensor);
 				/*String mobileId = id+"-"+i;
@@ -232,9 +230,9 @@ public class SmartMiningMain extends Application{
 			return fognode;
 	}
 	
-	private static FogDevice addGasSensors(String id, int userId,
+	private static FogDevice addGasMC(String id, int userId,
 			String appId, int parentId){
-			FogDevice gasSensor = createFogDevice("g-"+id, 5000, 1000, 10000,
+			FogDevice gasSensor = createFogDevice("g-"+id, 80, 1, 10000,
 			10000, 4, 0, 87.53, 82.44);
 			gasSensor.setParentId(parentId);
 			Sensor sensor = new Sensor("s-"+id, "GAS", userId, appId, new
@@ -250,9 +248,9 @@ public class SmartMiningMain extends Application{
 			return gasSensor;
 	}
 	
-	private static FogDevice addChSensors(String id, int userId,
+	private static FogDevice addChMC(String id, int userId,
 			String appId, int parentId){
-			FogDevice chSensor = createFogDevice("d-"+id, 5000, 1000, 10000,
+			FogDevice chSensor = createFogDevice("d-"+id, 80, 1, 10000,
 			10000, 4, 0, 87.53, 82.44);
 			chSensor.setParentId(parentId);
 			Sensor sensor = new Sensor("sch-"+id, "CH", userId, appId,
@@ -268,9 +266,9 @@ public class SmartMiningMain extends Application{
 			return chSensor;
 	}
 	
-	private static FogDevice addSrSensors(String id, int userId,
+	private static FogDevice addSrMC(String id, int userId,
 			String appId, int parentId){
-			FogDevice srSensor = createFogDevice("s-"+id, 5000, 1000, 10000,
+			FogDevice srSensor = createFogDevice("s-"+id, 80, 1, 10000,
 			10000, 4, 0, 87.53, 82.44);
 			srSensor.setParentId(parentId);
 			Sensor sensor = new Sensor("ssr-"+id, "SR", userId, appId,
@@ -422,9 +420,9 @@ public class SmartMiningMain extends Application{
 	}
 	
 	public static void setFogDeviceAmount(int amount) { System.out.println("FOG"); numOfFogDevices = amount; }
-	public static void setGasSensorAmount(int amount) { System.out.println("GAS"); numOfGasSensorsPerMasterNode = amount; }
-	public static void setChSensorAmount(int amount) { System.out.println("CH"); numOfChSensorsPerMasterNode = amount; }
-	public static void setSrSensorAmount(int amount) { System.out.println("SR"); numOfSrSensorsPerMasterNode = amount; }
+	public static void setGasSensorAmount(int amount) { System.out.println("GAS"); numOfGasMCPerMasterNode = amount; }
+	public static void setChSensorAmount(int amount) { System.out.println("CH"); numOfChMCPerMasterNode = amount; }
+	public static void setSrSensorAmount(int amount) { System.out.println("SR"); numOfSrMCPerMasterNode = amount; }
 	public static void setCloud(boolean flag) { System.out.println("CLOUD"); CLOUD = flag; }
 	
 	public static double getSimulationExecutionTime() { return simulationExecutionTime; };

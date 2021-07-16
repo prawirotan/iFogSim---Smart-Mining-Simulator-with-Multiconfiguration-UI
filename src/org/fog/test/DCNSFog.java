@@ -40,6 +40,7 @@ import org.fog.utils.distribution.DeterministicDistribution;
  * @author Harshit Gupta
  *
  */
+
 public class DCNSFog {
 	static List<FogDevice> fogDevices = new ArrayList<FogDevice>();
 	static List<Sensor> sensors = new ArrayList<Sensor>();
@@ -48,7 +49,7 @@ public class DCNSFog {
 	static int numOfCamerasPerArea = 4;
 	
 	private static boolean CLOUD = false;
-	
+
 	public static void main(String[] args) {
 
 		Log.printLine("Starting DCNS...");
@@ -64,6 +65,7 @@ public class DCNSFog {
 			String appId = "dcns"; // identifier of the application
 			
 			FogBroker broker = new FogBroker("broker");
+			
 			
 			ApplicationFog application = createApplication(appId, broker.getId());
 			application.setUserId(broker.getId());

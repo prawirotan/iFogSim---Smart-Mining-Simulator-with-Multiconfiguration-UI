@@ -40,6 +40,12 @@ public class AppDelayChartController implements Initializable {
     private CategoryAxis xAxis;
     @FXML
     private LineChart<String, Double> appDelayLoop;
+    
+    int fogComparisonBreak = 18;
+    int sensorComparisonBreak = 24;
+    int gasSensorBreak = 12;
+    int chSensorBreak = 21;
+    int srSensorBreak = 27;
 	
 	File file = null;
 	List<Double> value = new ArrayList<Double>();
@@ -55,105 +61,263 @@ public class AppDelayChartController implements Initializable {
         xAxis.setAnimated(false);
 	}
 	
+	void clearEverything() {
+		value.clear();
+		key.clear();
+		cloudValue.clear();
+		appDelayLoop.getData().clear();
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@FXML
 	void searchFileOnClick(ActionEvent event) {
+		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		file = fileChooser.showOpenDialog(new Stage());
 		int counter = 0;
-
-		try (Scanner scanner = new Scanner(file)) {
-			while (scanner.hasNext()) {
-				if (counter%2==0) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'p') {
-							StringBuilder value_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								value_string.append(data.charAt(j));
+		
+		clearEverything();
+		
+		if (file.toString().endsWith("app-delay.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					if (counter%2==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '@') {
+								StringBuilder value_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									value_string.append(data.charAt(j));
+								}
+								value.add(Double.parseDouble(value_string.toString()));
+								break;
 							}
-							value.add(Double.parseDouble(value_string.toString()));
-							break;
 						}
 					}
-				}
-				else if (counter%2==1) {
-					String data = scanner.next();
-					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'g') {
-							StringBuilder key_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
-								key_string.append(data.charAt(j));
+					else if (counter%2==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'g') {
+								StringBuilder key_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									key_string.append(data.charAt(j));
+								}
+								key.add(key_string.toString());
+								break;
 							}
-							key.add(key_string.toString());
-							break;
 						}
 					}
+					counter++;
 				}
-				counter++;
+				
+				
+				
+				XYChart.Series series1 = new XYChart.Series<>();
+				XYChart.Series series2 = new XYChart.Series<>();
+				series1.setName("Sensors -> Actuators, Master Node Amount, Cloudward Mapping");
+				series2.setName("Sensors -> Actuators, Master Node Amount, Edgeward Mapping");
+				
+				int configCount = 0;
+				for (int i=0; i<value.size(); i++) {
+					
+					if ((i+1)%3==1) {
+						
+						final XYChart.Data<String, Number> data1 = new XYChart.Data("GAS LOOP"+key.get(i), value.get(i));
+						
+						data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					          if (node != null) {      
+					            displayLabelForData(data1);
+					          } 
+					        }
+						});
+						if (configCount < fogComparisonBreak) {
+							series1.getData().add(data1);
+						}
+						else if (configCount >= fogComparisonBreak) {
+							series2.getData().add(data1);
+						}
+						configCount++;
+					}
+					
+					else if ((i+1)%3==2) {
+						
+						final XYChart.Data<String, Number> data1 = new XYChart.Data("CH LOOP"+key.get(i), value.get(i));
+						
+						data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					          if (node != null) {      
+					            displayLabelForData(data1);
+					          } 
+					        }
+						});
+						if (configCount < fogComparisonBreak) {
+							series1.getData().add(data1);
+						}
+						else if (configCount >= fogComparisonBreak) {
+							series2.getData().add(data1);
+						}
+						configCount++;
+					}
+					
+					else if ((i+1)%3==0) {
+						
+						final XYChart.Data<String, Number> data1 = new XYChart.Data("SR LOOP"+key.get(i), value.get(i));
+						
+						data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					          if (node != null) {      
+					            displayLabelForData(data1);
+					          } 
+					        }
+						});
+						if (configCount < fogComparisonBreak) {
+							series1.getData().add(data1);
+						}
+						else if (configCount >= fogComparisonBreak) {
+							series2.getData().add(data1);
+						}
+
+						configCount++;
+					}
+					
+				}
+				
+				appDelayLoop.getData().add(series1);
+				appDelayLoop.getData().add(series2);
+					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			XYChart.Series series1 = new XYChart.Series<>();
 
-			for (int i=0; i<value.size(); i++) {
-				
-				if ((i+1)%3==1) {
-					
-					final XYChart.Data<String, Number> data1 = new XYChart.Data("GAS LOOP"+key.get(i), value.get(i));
-					
-					data1.nodeProperty().addListener(new ChangeListener<Node>() {
-				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-				          if (node != null) {      
-				            displayLabelForData(data1);
-				          } 
-				        }
-					});
-
-					series1.getData().add(data1);
-				}
-				
-				else if ((i+1)%3==2) {
-					
-					final XYChart.Data<String, Number> data1 = new XYChart.Data("CH LOOP"+key.get(i), value.get(i));
-					
-					data1.nodeProperty().addListener(new ChangeListener<Node>() {
-				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-				          if (node != null) {      
-				            displayLabelForData(data1);
-				          } 
-				        }
-					});
-
-					series1.getData().add(data1);
-				}
-				
-				else if ((i+1)%3==0) {
-					
-					final XYChart.Data<String, Number> data1 = new XYChart.Data("SR LOOP"+key.get(i), value.get(i));
-					
-					data1.nodeProperty().addListener(new ChangeListener<Node>() {
-				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-				          if (node != null) {      
-				            displayLabelForData(data1);
-				          } 
-				        }
-					});
-					series1.getData().add(data1);
-				}
-				
-				//series1.getData().add(new XYChart.Data<String, Double>(key.get(i), value.get(i)));
-				//series2.getData().add(new XYChart.Data<String, Double>("Cloud"+key.get(i), cloudValue.get(i)));
-			}
-			
-			appDelayLoop.getData().add(series1);
-				
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		
+		else if (file.toString().endsWith("app-delay-sensor.txt")) {
+			try (Scanner scanner = new Scanner(file)) {
+				while (scanner.hasNext()) {
+					if (counter%2==0) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == '@') {
+								StringBuilder value_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									value_string.append(data.charAt(j));
+								}
+								value.add(Double.parseDouble(value_string.toString()));
+								break;
+							}
+						}
+					}
+					else if (counter%2==1) {
+						String data = scanner.next();
+						for (int i=0; i<data.length(); i++) {
+							if (data.charAt(i) == 'g') {
+								StringBuilder key_string = new StringBuilder();
+								for (int j=i+1; j<data.length(); j++) {
+									key_string.append(data.charAt(j));
+								}
+								key.add(key_string.toString());
+								break;
+							}
+						}
+					}
+					counter++;
+				}
+				
+				XYChart.Series series1 = new XYChart.Series<>();
+				XYChart.Series series2 = new XYChart.Series<>();
+				XYChart.Series series3 = new XYChart.Series<>();
+				series1.setName("Gas Sensor Variance");
+				series2.setName("Chemical Sensor Variance");
+				series3.setName("Surrounding Sensor Variance");
 
+				int configCount = 0;
+				for (int i=0; i<value.size(); i++) {
+					
+					if ((i+1)%3==1) {
+						
+						final XYChart.Data<String, Number> data1 = new XYChart.Data("GAS LOOP"+key.get(i), value.get(i));
+						
+						data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					          if (node != null) {      
+					            displayLabelForData(data1);
+					          } 
+					        }
+						});
+						if (configCount < gasSensorBreak) {
+							series1.getData().add(data1);
+						}
+						else if (configCount < chSensorBreak) {
+							series2.getData().add(data1);
+						}
+						else if (configCount < srSensorBreak) {
+							series3.getData().add(data1);
+						}
+						configCount++;
+					}
+					
+					else if ((i+1)%3==2) {
+						
+						final XYChart.Data<String, Number> data1 = new XYChart.Data("CH LOOP"+key.get(i), value.get(i));
+						
+						data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					          if (node != null) {      
+					            displayLabelForData(data1);
+					          } 
+					        }
+						});
+						if (configCount < gasSensorBreak) {
+							series1.getData().add(data1);
+						}
+						else if (configCount < chSensorBreak) {
+							series2.getData().add(data1);
+						}
+						else if (configCount < srSensorBreak) {
+							series3.getData().add(data1);
+						}
+						configCount++;
+					}
+					
+					else if ((i+1)%3==0) {
+						
+						final XYChart.Data<String, Number> data1 = new XYChart.Data("SR LOOP"+key.get(i), value.get(i));
+						
+						data1.nodeProperty().addListener(new ChangeListener<Node>() {
+					        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+					          if (node != null) {      
+					            displayLabelForData(data1);
+					          } 
+					        }
+						});
+						if (configCount < gasSensorBreak) {
+							series1.getData().add(data1);
+						}
+						else if (configCount < chSensorBreak) {
+							series2.getData().add(data1);
+						}
+						else if (configCount < srSensorBreak) {
+							series3.getData().add(data1);
+						}
+						configCount++;
+					}
+				}
+				
+				appDelayLoop.getData().add(series1);
+				appDelayLoop.getData().add(series2);
+				appDelayLoop.getData().add(series3);
+					
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
+
+		
 	
 	private void displayLabelForData(XYChart.Data<String, Number> data) {
 		  final Node node = data.getNode();
