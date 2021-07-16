@@ -22,6 +22,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -39,7 +40,7 @@ public class NetworkChartController implements Initializable{
     @FXML
     private CategoryAxis xAxis;
     @FXML
-    private ScatterChart<String, Double> networkUsages;
+    private LineChart<String, Double> networkUsages;
 	
 	File file = null;
 	List<Double> value = new ArrayList<Double>();
@@ -83,7 +84,7 @@ public class NetworkChartController implements Initializable{
 					for (int i=0; i<data.length(); i++) {
 						if (data.charAt(i) == 'g') { //configuration
 							StringBuilder key_string = new StringBuilder();
-							for (int j=i+1; j<data.length(); j++) {
+							for (int j=i+1; j<data.length(); j++) {				//EDIT
 								key_string.append(data.charAt(j));
 							}
 							key.add(key_string.toString());
@@ -107,11 +108,13 @@ public class NetworkChartController implements Initializable{
 				counter++;
 			}
 			
+			//int configCounter = 0;
 			XYChart.Series series1 = new XYChart.Series<>();
 			XYChart.Series series2 = new XYChart.Series<>();
+			//XYChart.Series series3 = new XYChart.Series<>();
+			//XYChart.Series series4 = new XYChart.Series<>();
 			for (int i=0; i<value.size(); i++) {
-				
-				final XYChart.Data<String, Number> data1 = new XYChart.Data("F,G,C,S = "+key.get(i), value.get(i));
+				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i), value.get(i));
 				final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud, "+key.get(i), cloudValue.get(i));
 				data1.nodeProperty().addListener(new ChangeListener<Node>() {
 			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
@@ -128,15 +131,24 @@ public class NetworkChartController implements Initializable{
 			          } 
 			        }
 				});
-				
-				series1.getData().add(data1);
-				series2.getData().add(data2);
+				/*if (configCounter<6) {
+					series1.getData().add(data1);
+					series2.getData().add(data2);
+				}*/
+				/*else if (configCounter >= 6) {
+					System.out.println("Goes here");
+					series3.getData().add(data1);
+					series4.getData().add(data2);
+				}
 				//series1.getData().add(new XYChart.Data<String, Double>(key.get(i), value.get(i)));
 				//series2.getData().add(new XYChart.Data<String, Double>("Cloud"+key.get(i), cloudValue.get(i)));
+				configCounter++;*/
 			}
 			
 			networkUsages.getData().add(series1);
 			networkUsages.getData().add(series2);
+			//networkUsages.getData().add(series3);
+			//networkUsages.getData().add(series4);
 				
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

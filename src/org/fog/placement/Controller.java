@@ -48,7 +48,7 @@ public class Controller extends SimEntity{
 	
 	private double networkUsage;
 	private double cloudUsage;
-	
+	private double executionTime;
 	
 	public Controller(String name, List<FogDevice> fogDevices, List<Sensor> sensors, List<Actuator> actuators) {
 		super(name);
@@ -184,6 +184,8 @@ public class Controller extends SimEntity{
 	}
 	private void printTimeDetails() {
 		
+		executionTime = Calendar.getInstance().getTimeInMillis() - TimeKeeper.getInstance().getSimulationStartTime();
+		
 		System.out.println("=========================================");
 		System.out.println("============== RESULTS ==================");
 		System.out.println("=========================================");
@@ -280,6 +282,10 @@ public class Controller extends SimEntity{
 				sendNow(deviceId, FogEvents.LAUNCH_MODULE, module);
 			}
 		}
+	}
+	
+	public double getExecutionTime() {
+		return executionTime;
 	}
 	
 	public double getNetworkUsage() {

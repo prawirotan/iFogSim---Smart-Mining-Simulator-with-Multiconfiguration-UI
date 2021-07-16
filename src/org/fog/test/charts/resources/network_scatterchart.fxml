@@ -2,8 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.ScatterChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
@@ -11,19 +11,6 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="gradient-background" stylesheets="@../../resources/styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fog.test.charts.resources.NetworkChartController">
-   <center>
-      <ScatterChart fx:id="networkUsages" prefHeight="325.0" prefWidth="600.0" styleClass="line-color" stylesheets="@../resources/styles.css" BorderPane.alignment="CENTER">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" fx:id="xAxis" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis fx:id="yAxis" side="LEFT" />
-        </yAxis>
-         <BorderPane.margin>
-            <Insets top="20.0" />
-         </BorderPane.margin>
-      </ScatterChart>
-   </center>
    <top>
       <VBox prefHeight="61.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -42,4 +29,17 @@
          </children>
       </VBox>
    </top>
+   <center>
+      <LineChart fx:id="networkUsages" prefHeight="325.0" prefWidth="774.0" styleClass="line-color" stylesheets="@../../resources/styles.css" BorderPane.alignment="CENTER">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" fx:id="xAxis" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="yAxis" side="LEFT" />
+        </yAxis>
+         <BorderPane.margin>
+            <Insets top="20.0" />
+         </BorderPane.margin>
+      </LineChart>
+   </center>
 </BorderPane>

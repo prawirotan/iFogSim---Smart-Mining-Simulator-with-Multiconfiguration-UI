@@ -20,6 +20,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -37,7 +38,7 @@ public class TupleExecChartController implements Initializable {
     @FXML
     private CategoryAxis xAxis;
     @FXML
-    private ScatterChart<String, Double> tupleExecution;
+    private LineChart<String, Double> tupleExecution;
     
     File file = null;
     List<Double> value = new ArrayList<Double>();
@@ -111,7 +112,7 @@ public class TupleExecChartController implements Initializable {
 				
 			for (int i=0; i<value.size(); i++) {
 					
-				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i)+" F,G,C,S = "+configKey.get(i), value.get(i));	
+				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i)+" "+configKey.get(i), value.get(i));	
 				data1.nodeProperty().addListener(new ChangeListener<Node>() {
 				       @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
 				         if (node != null) {      
@@ -149,7 +150,7 @@ public class TupleExecChartController implements Initializable {
 		      );
 		      dataText.setLayoutY(
 		        Math.round(
-		          bounds.getMinY() - dataText.prefHeight(-1) * 0.1
+		          bounds.getMinY() - dataText.prefHeight(-1) * 0.0001
 		        )
 		      );
 		    }

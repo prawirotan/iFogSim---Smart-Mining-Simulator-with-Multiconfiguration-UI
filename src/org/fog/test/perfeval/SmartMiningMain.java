@@ -77,6 +77,8 @@ public class SmartMiningMain extends Application{
 	private static Map<Long, String> cloudEnergyConsumptionOutputMap = new HashMap<>();
 	//Map of Tuple Execution Times
 	private static Map<String, Double> tupleExecutionOutputMap = new HashMap<>();
+	//Get current Simulation Execution Time
+	private static double simulationExecutionTime;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -166,6 +168,7 @@ public class SmartMiningMain extends Application{
 					energyConsumptionOutputMap = controller.getEnergyConsumptionMap();
 					cloudEnergyConsumptionOutputMap = controller.getCloudEnergyConsumptionMap();
 					tupleExecutionOutputMap = controller.getTupleExecutionMap();
+					simulationExecutionTime = controller.getExecutionTime();
 					
 					Log.printLine("Mining industry simulation finished!");
 					System.out.println("Simulation finished YOOO.");
@@ -197,7 +200,7 @@ public class SmartMiningMain extends Application{
 	}
 	
 	private static FogDevice addMasterNode(String id, int userId, String appId, int parentId){ //Master Module
-		FogDevice fognode = createFogDevice("a-"+id, 5000, 4000, 10000, 10000, 3, 0.0, 107.339, 83.4333);
+		FogDevice fognode = createFogDevice("a-"+id, 50000, 40000, 10000, 10000, 3, 0.0, 107.339, 83.4333);
 		fogDevices.add(fognode);
 		fognode.setUplinkLatency(1.0);
 		
@@ -424,6 +427,7 @@ public class SmartMiningMain extends Application{
 	public static void setSrSensorAmount(int amount) { System.out.println("SR"); numOfSrSensorsPerMasterNode = amount; }
 	public static void setCloud(boolean flag) { System.out.println("CLOUD"); CLOUD = flag; }
 	
+	public static double getSimulationExecutionTime() { return simulationExecutionTime; };
 	public static double getNetworkUsageOutput() { return networkUsageOutput; }
 	public static double getCloudUsageOutput() { return cloudUsageOutput; }
 	public static List<Double> getAppLoopDelayOutput() { return appLoopDelayOutput; }

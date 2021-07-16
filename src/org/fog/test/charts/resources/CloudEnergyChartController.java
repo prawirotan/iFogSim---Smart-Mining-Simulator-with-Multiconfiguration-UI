@@ -22,35 +22,34 @@ import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class EnergyChartController implements Initializable {
-
+public class CloudEnergyChartController implements Initializable {
 	
 	@FXML
 	private Button searchFile;
 	@FXML
-    private NumberAxis yAxis;
-    @FXML
-    private CategoryAxis xAxis;
-    @FXML
-    private LineChart<String, Double> energyConsumption;
-    
-    File file = null;
-    List<Double> value = new ArrayList<Double>();
-	List<String> key = new ArrayList<String>();
-	List<String> configKey = new ArrayList<String>();
+	private NumberAxis yAxis;
+	@FXML
+	private CategoryAxis xAxis;
+	@FXML
+	private LineChart<String, Double> cloudEnergyConsumption;
 	
+	File file = null;
+	List<String> configKey = new ArrayList<String>();
+	List<Long> cloudEnergyValue = new ArrayList<Long>();
+	List<String> cloudString = new ArrayList<String>();
+	List<String> configCloudKey = new ArrayList<String>();
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		xAxis.setLabel("Configuration");
-        yAxis.setLabel("Energy Consumption");
+        yAxis.setLabel("Cloud Energy Consumption");
         xAxis.setAnimated(false);
 	}
 	
@@ -69,13 +68,13 @@ public class EnergyChartController implements Initializable {
 				if (counter%3==0) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == '!') {
-							System.out.println("ENERGY!");
-							StringBuilder value_string = new StringBuilder();
+						if (data.charAt(i) == '.') {
+							System.out.println("CLOUD ENERGY!");
+							StringBuilder cloudVal_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
-								value_string.append(data.charAt(j));
+								cloudVal_string.append(data.charAt(j));
 							}
-							value.add(Double.parseDouble(value_string.toString()));
+							cloudEnergyValue.add(Long.parseLong(cloudVal_string.toString()));
 							break;
 						}
 					}
@@ -83,13 +82,13 @@ public class EnergyChartController implements Initializable {
 				else if (counter%3==1) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'e') {
-							System.out.println("DEVICE NAME!");
-							StringBuilder key_string = new StringBuilder();
+						if (data.charAt(i) == 'd') {
+							System.out.println("CLOUD NAME!");
+							StringBuilder cloud_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
-								key_string.append(data.charAt(j));
+								cloud_string.append(data.charAt(j));
 							}
-							key.add(key_string.toString());
+							cloudString.add(cloud_string.toString());
 							break;
 						}
 					}
@@ -97,14 +96,15 @@ public class EnergyChartController implements Initializable {
 				else if (counter%3==2) {
 					String data = scanner.next();
 					for (int i=0; i<data.length(); i++) {
-						if (data.charAt(i) == 'g') {
-							System.out.println("DEVICE CONFIG!");
-							StringBuilder configKey_string = new StringBuilder();
+						if (data.charAt(i) == '?') {
+							System.out.println("CLOUD DEVICE CONFIG!");
+							StringBuilder configCloudKey_string = new StringBuilder();
 							for (int j=i+1; j<data.length(); j++) {
-								configKey_string.append(data.charAt(j));
+								configCloudKey_string.append(data.charAt(j));
 							}
-							configKey.add(configKey_string.toString());
+							configCloudKey.add(configCloudKey_string.toString());
 							break;
+							
 						}
 					}
 				}
@@ -112,30 +112,25 @@ public class EnergyChartController implements Initializable {
 			}
 				
 			XYChart.Series series1 = new XYChart.Series<>();
-			//XYChart.Series series2 = new XYChart.Series<>();
+			
+			System.out.println(cloudEnergyValue.size());
 				
-			int configCount = 0;
-			for (int i=0; i<value.size(); i++) {
-					
-				final XYChart.Data<String, Number> data1 = new XYChart.Data(key.get(i)+" "+configKey.get(i), value.get(i));	
-				data1.nodeProperty().addListener(new ChangeListener<Node>() {
-				       @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+			for (int i=0; i<cloudEnergyValue.size(); i++) {	
+				System.out.println("CLOUD COME");
+				System.out.println("CloudEnergy"+configCloudKey.get(i)+" "+cloudEnergyValue.get(i));
+				final XYChart.Data<String, Number> data2 = new XYChart.Data("Cloud_Consumption "+configCloudKey.get(i), cloudEnergyValue.get(i));
+				data2.nodeProperty().addListener(new ChangeListener<Node>() {
+				       public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
 				         if (node != null) {      
-				           displayLabelForData(data1);
+				           displayLabelForData(data2);
 				         } 
 				       }
 				});
-				//if (configCount < 6) {
-					series1.getData().add(data1);
-				//}
-				/*else if (configCount >= 6) {
-					series2.getData().add(data1);
-				}
-				configCount++;*/
+				series1.getData().add(data2);
 			}
-
-			energyConsumption.getData().add(series1);
-			//energyConsumption.getData().add(series2);
+			
+			//energyConsumption.getData().add(series1);
+			cloudEnergyConsumption.getData().add(series1);
 				
 				
 		} catch (FileNotFoundException e) {

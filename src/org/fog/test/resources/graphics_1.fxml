@@ -7,6 +7,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -66,6 +67,16 @@
                                     <Button fx:id="fog3" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="65.0" prefWidth="59.0" text="3" />
                                     <Button fx:id="fog4" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="73.0" prefWidth="59.0" text="4" />
                                     <Button fx:id="fog5" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="69.0" prefWidth="56.0" text="5" />
+                                    <HBox prefHeight="50.0" prefWidth="105.0">
+                                       <children>
+                                          <TextField fx:id="customFogInput" prefHeight="50.0" prefWidth="72.0" text="Custom">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </TextField>
+                                          <Button fx:id="customFogOK" mnemonicParsing="false" onAction="#changeFogDeviceAmount" prefHeight="50.0" prefWidth="56.0" text="OK" />
+                                       </children>
+                                    </HBox>
                                  </children>
                               </HBox>
                            </children>
@@ -159,9 +170,19 @@
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveToFile" prefHeight="93.0" prefWidth="295.0" text="CLICK HERE TO SAVE OUTPUT TO TEXT FILE" textAlignment="CENTER" wrapText="true">
+                        <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveToFile" prefHeight="93.0" prefWidth="295.0" text="SAVE TO DEFAULT FILES" textAlignment="CENTER" wrapText="true">
                            <font>
-                              <Font name="Ebrima Bold" size="20.0" />
+                              <Font name="Ebrima Bold" size="14.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="saveButtonFogMetric" mnemonicParsing="false" onAction="#saveToFileFogMetric" prefHeight="93.0" prefWidth="295.0" text="SAVE TOWARD FOG METRIC" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Ebrima Bold" size="11.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="saveButtonSensorMetric" mnemonicParsing="false" onAction="#saveToFileSensorMetric" prefHeight="93.0" prefWidth="295.0" text="SAVE TOWARD SENSOR METRIC" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Ebrima Bold" size="11.0" />
                            </font>
                         </Button>
                      </children>
@@ -206,6 +227,11 @@
                                                       <Font name="System Bold" size="18.0" />
                                                    </font>
                                                 </Label>
+                                                <Label fx:id="simExecConfig" text="Sim Execution Time: ">
+                                                   <font>
+                                                      <Font name="System Bold" size="18.0" />
+                                                   </font>
+                                                </Label>
                                              </children>
                                           </VBox>
                                        </children>
@@ -235,6 +261,11 @@
                                                    </font>
                                                 </Label>
                                                 <Label fx:id="cloudConfig">
+                                                   <font>
+                                                      <Font size="18.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label fx:id="simExecutionTimeUpdate">
                                                    <font>
                                                       <Font size="18.0" />
                                                    </font>

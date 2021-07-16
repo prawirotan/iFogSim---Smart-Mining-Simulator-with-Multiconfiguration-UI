@@ -20,6 +20,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
@@ -38,7 +39,7 @@ public class AppDelayChartController implements Initializable {
     @FXML
     private CategoryAxis xAxis;
     @FXML
-    private ScatterChart<String, Double> appDelayLoop;
+    private LineChart<String, Double> appDelayLoop;
 	
 	File file = null;
 	List<Double> value = new ArrayList<Double>();
@@ -97,19 +98,50 @@ public class AppDelayChartController implements Initializable {
 
 			for (int i=0; i<value.size(); i++) {
 				
-				final XYChart.Data<String, Number> data1 = new XYChart.Data("App Loops(GAS, CH, RS) "+key.get(i), value.get(i));
-				
-				data1.nodeProperty().addListener(new ChangeListener<Node>() {
-			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
-			          if (node != null) {      
-			            displayLabelForData(data1);
-			          } 
-			        }
-				});
+				if ((i+1)%3==1) {
+					
+					final XYChart.Data<String, Number> data1 = new XYChart.Data("GAS LOOP"+key.get(i), value.get(i));
+					
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(data1);
+				          } 
+				        }
+					});
 
+					series1.getData().add(data1);
+				}
 				
-				series1.getData().add(data1);
+				else if ((i+1)%3==2) {
+					
+					final XYChart.Data<String, Number> data1 = new XYChart.Data("CH LOOP"+key.get(i), value.get(i));
+					
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(data1);
+				          } 
+				        }
+					});
 
+					series1.getData().add(data1);
+				}
+				
+				else if ((i+1)%3==0) {
+					
+					final XYChart.Data<String, Number> data1 = new XYChart.Data("SR LOOP"+key.get(i), value.get(i));
+					
+					data1.nodeProperty().addListener(new ChangeListener<Node>() {
+				        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+				          if (node != null) {      
+				            displayLabelForData(data1);
+				          } 
+				        }
+					});
+					series1.getData().add(data1);
+				}
+				
 				//series1.getData().add(new XYChart.Data<String, Double>(key.get(i), value.get(i)));
 				//series2.getData().add(new XYChart.Data<String, Double>("Cloud"+key.get(i), cloudValue.get(i)));
 			}
