@@ -348,11 +348,14 @@ public class GraphicsController implements Initializable {
 				//networkUsage and Cloud Usage
 
 				XYChart.Series series1 = new XYChart.Series<>();
-				final XYChart.Data<String, Number> dataNetworkUsage = new XYChart.Data("Network Usage", SmartMiningMain.getNetworkUsageOutput());
-				final XYChart.Data<String, Number> dataCloudUsage = new XYChart.Data("Cloud Usage", SmartMiningMain.getCloudUsageOutput());
+				final XYChart.Data<String, Number> dataNetworkUsage = new XYChart.Data
+						("Network Usage", SmartMiningMain.getNetworkUsageOutput());
+				final XYChart.Data<String, Number> dataCloudUsage = new XYChart.Data
+						("Cloud Usage", SmartMiningMain.getCloudUsageOutput());
 				
 				dataNetworkUsage.nodeProperty().addListener(new ChangeListener<Node>() {
-			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+			        @Override public void changed(ObservableValue<? extends Node> ov, 
+			        		Node oldNode, final Node node) {
 			          if (node != null) {      
 			            displayLabelForData(dataNetworkUsage);
 			          } 
@@ -360,13 +363,13 @@ public class GraphicsController implements Initializable {
 				});
 				
 				dataCloudUsage.nodeProperty().addListener(new ChangeListener<Node>() {
-			        @Override public void changed(ObservableValue<? extends Node> ov, Node oldNode, final Node node) {
+			        @Override public void changed(ObservableValue<? extends Node> ov, 
+			        		Node oldNode, final Node node) {
 			          if (node != null) {      
 			            displayLabelForData(dataCloudUsage);
 			          } 
 			        }
 				});
-				
 				
 				series1.getData().add(dataNetworkUsage);
 				series1.getData().add(dataCloudUsage);
@@ -863,14 +866,18 @@ public class GraphicsController implements Initializable {
 			  final Node node = data.getNode();
 			  final Text dataText = new Text(round(data.getYValue().doubleValue(), 2) + "");
 			  node.parentProperty().addListener(new ChangeListener<Parent>() {
-			    @Override public void changed(ObservableValue<? extends Parent> ov, Parent oldParent, Parent parent) {
+			    @Override public void changed(
+			    		ObservableValue<? extends Parent> ov, 
+			    		Parent oldParent, Parent parent) {
 			      Group parentGroup = (Group) parent;
 			      parentGroup.getChildren().add(dataText);
 			    }
 			  });
 
 			  node.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
-			    @Override public void changed(ObservableValue<? extends Bounds> ov, Bounds oldBounds, Bounds bounds) {
+			    @Override public void changed(
+			    		ObservableValue<? extends Bounds> ov, 
+			    		Bounds oldBounds, Bounds bounds) {
 			      dataText.setLayoutX(
 			        Math.round(
 			          bounds.getMinX() + bounds.getWidth() / 2 - dataText.prefWidth(-1) / 2

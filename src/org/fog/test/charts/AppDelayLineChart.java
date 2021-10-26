@@ -12,7 +12,8 @@ public class AppDelayLineChart extends Application {
 	public void start(final Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("../charts/resources/appdelay_linechart.fxml"));
+		loader.setLocation(getClass().getResource
+				("../charts/resources/appdelay_linechart.fxml"));
 		Parent root = loader.load();
 		primaryStage.setTitle("Application Delay Scatter Chart");
 		primaryStage.setScene(new Scene(root));

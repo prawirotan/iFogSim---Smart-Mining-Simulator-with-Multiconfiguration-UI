@@ -419,11 +419,16 @@ public class SmartMiningMain extends Application{
 		return fogdevice;
 	}
 	
-	public static void setFogDeviceAmount(int amount) { System.out.println("FOG"); numOfFogDevices = amount; }
-	public static void setGasSensorAmount(int amount) { System.out.println("GAS"); numOfGasMCPerMasterNode = amount; }
-	public static void setChSensorAmount(int amount) { System.out.println("CH"); numOfChMCPerMasterNode = amount; }
-	public static void setSrSensorAmount(int amount) { System.out.println("SR"); numOfSrMCPerMasterNode = amount; }
-	public static void setCloud(boolean flag) { System.out.println("CLOUD"); CLOUD = flag; }
+	public static void setFogDeviceAmount(int amount) 
+	{System.out.println("FOG"); numOfFogDevices = amount;}
+	public static void setGasSensorAmount(int amount)
+	{System.out.println("GAS"); numOfGasMCPerMasterNode = amount;}
+	public static void setChSensorAmount(int amount)
+	{System.out.println("CH"); numOfChMCPerMasterNode = amount;}
+	public static void setSrSensorAmount(int amount) 
+	{System.out.println("SR"); numOfSrMCPerMasterNode = amount;}
+	public static void setCloud(boolean flag) 
+	{System.out.println("CLOUD"); CLOUD = flag;}
 	
 	public static double getSimulationExecutionTime() { return simulationExecutionTime; };
 	public static double getNetworkUsageOutput() { return networkUsageOutput; }
